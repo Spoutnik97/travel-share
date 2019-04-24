@@ -9,6 +9,30 @@ import styles from '../styles/styles';
 
 const SERVICES_TYPES = ['restaurants', 'atm'];
 
+const services_test = [
+  {
+    name: 'Le Spoutnik',
+    description: 'Un petit restaurant de charme...',
+    type: 'restaurant',
+    picture: '',
+    likes: 0,
+  },
+  {
+    name: 'Hello Cafe',
+    description: 'Un petit cafe sympa',
+    type: 'restaurant',
+    picture: '',
+    likes: 0,
+  },
+  {
+    name: 'Lounge Air France',
+    description: 'Espace de repos AirFrance pour les business traveller',
+    type: 'chill',
+    picture: '',
+    likes: 0,
+  },
+];
+
 export default class AirportsServices extends Component {
   static propTypes = {};
 
@@ -21,7 +45,9 @@ export default class AirportsServices extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      services: services_test,
+    };
   }
 
   filterObject = (obj, filter, filterValue) => {
@@ -37,11 +63,17 @@ export default class AirportsServices extends Component {
 
   componentDidMount() {
     const filteredServices = [];
-
+    let servicesByType = [];
     SERVICES_TYPES.forEach(type => {
+      servicesByType = [];
+      this.state.services.forEach(service => {
+        if (service.type === type) {
+          servicesByType.push(service);
+        }
+      });
       filteredServices.push({
         header: type,
-        services: this.filterObject(this.state.services, 'type', type),
+        services: servicesByType,
       });
     });
 

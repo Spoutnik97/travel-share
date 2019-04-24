@@ -30,7 +30,10 @@ export default class CardPeople extends Component {
   render() {
     return (
       <View style={[styles.row, styles.card]}>
-        <Avatar.Image size={64} source={require('../assets/test/pp.jpg')} />
+        <Avatar.Image
+          size={64}
+          source={require('../assets/test/florence.jpg')}
+        />
         <View style={[styles.column, styles.content]}>
           <Title>{this.props.header}</Title>
           <Paragraph>{this.props.content}</Paragraph>
