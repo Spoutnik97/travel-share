@@ -3,14 +3,24 @@ import PropTypes from 'prop-types';
 
 import firebase from 'firebase';
 
-import { AsyncStorage, Text, View } from 'react-native';
+import { AsyncStorage, Image, ImageBackground, Text, View } from 'react-native';
 import { SocialIcon } from 'react-native-elements';
-import { Button, Subheading, TextInput, Title } from 'react-native-paper';
+import {
+  Button,
+  Subheading,
+  TextInput,
+  Headline,
+  FAB,
+} from 'react-native-paper';
+import { Container, Content } from 'native-base';
 
 import colors from '../styles/colors';
 import styles from '../styles/styles';
 
 import firebaseConfig from '../keys/firebase';
+
+const imageBackground = require('../assets/background.jpg');
+const imageLogo = require('../assets/logo.png');
 
 export default class SignIn extends Component {
   static propTypes = {};
@@ -53,7 +63,7 @@ export default class SignIn extends Component {
   componentDidMount() {}
 
   handleSignInEmail = () => {
-    this.signup_TEST();
+    //this.signup_TEST();
     const { email, password } = this.state;
     firebase
       .auth()
@@ -61,6 +71,7 @@ export default class SignIn extends Component {
       .then(async () => {
         await AsyncStorage.setItem('user', JSON.stringify({ email }));
         await AsyncStorage.setItem('password', password);
+        this.props.navigation.navigate('App');
       })
       .catch(function(error) {
         // Handle Errors here.
@@ -71,23 +82,23 @@ export default class SignIn extends Component {
       });
   };
   handleSignUpEmail = () => {
-    this.signup_TEST();
-    const { email, password } = this.state;
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // [START_EXCLUDE]
-        if (errorCode === 'auth/wrong-password') {
-          this.setState({ password_error: true });
-        } else {
-          console.log(errorMessage);
-        }
-        console.log(error);
-      });
+    // this.signup_TEST();
+    // const { email, password } = this.state;
+    // firebase
+    //   .auth()
+    //   .signInWithEmailAndPassword(email, password)
+    //   .catch(function(error) {
+    //     // Handle Errors here.
+    //     var errorCode = error.code;
+    //     var errorMessage = error.message;
+    //     // [START_EXCLUDE]
+    //     if (errorCode === 'auth/wrong-password') {
+    //       this.setState({ password_error: true });
+    //     } else {
+    //       console.log(errorMessage);
+    //     }
+    //     console.log(error);
+    //   });
   };
 
   handleSignInGoogle = () => {
@@ -114,54 +125,70 @@ export default class SignIn extends Component {
   };
 
   render() {
+    // <FAB onPress={this.handleSignInFacebook} icon='check' label={"S'identifier avec Facebook"} />
+    // <FAB
+    //   title={"S'identifier avec Google"}
+    //   button
+    //   onPress={this.handleSignInGoogle}
+    //   type="google-plus-official"
+    // />
+    // <FAB
+    //   title={"S'identifier avec LinkedIn"}
+    //   button
+    //   onPress={this.handleSignInLinkedIn}
+    //   type="linkedin"
+    // />
+
     return (
-      <View style={styles.container}>
-        <Title>
-          {
-            "Connectez-vous à la plus grande plateforme d'échange entre voyageur au monde"
-          }
-        </Title>
-        {this.state.signup && (
-          <View style={[styles.column, styles.center]}>
-            <SocialIcon
-              title={"S'identifier avec Facebook"}
-              button
-              onPress={this.handleSignInFacebook}
-              type="facebook"
-            />
-            <SocialIcon
-              title={"S'identifier avec Google"}
-              button
-              onPress={this.handleSignInGoogle}
-              type="google-plus-official"
-            />
-            <SocialIcon
-              title={"S'identifier avec LinkedIn"}
-              button
-              onPress={this.handleSignInLinkedIn}
-              type="linkedin"
-            />
+      <ImageBackground
+        source={imageBackground}
+        style={{ width: '100%', height: '100%' }}
+        imageStyle={{ resizeMode: 'cover' }}
+      >
+        <View style={styles.container}>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Headline>{'Travel&Share'}</Headline>
+            <Image source={imageLogo} style={{ width: 100, height: 100 }} />
+          </View>
+
+          <View>
             <TextInput
-              mode="outlined"
+              mode="flat"
               label="Votre email"
-              placeholder=""
+              placeholder="Email"
               value={this.state.email}
+              style={styles.input}
               onChangeText={value => this.setState({ email: value })}
             />
             <TextInput
-              mode="outlined"
+              mode="flat"
               label="Mot de passe"
-              placeholder="********"
+              placeholder="Mot de passe"
+              secureTextEntry
               value={this.state.password}
+              style={styles.input}
               onChangeText={value => this.setState({ password: value })}
             />
 
-            <Button mode="contained" onPress={this.handleSignInEmail}>
-              {'Suivant'}
+            <Button
+              mode="contained"
+              style={{ marginTop: 24 }}
+              onPress={this.handleSignInEmail}
+            >
+              {'Connexion'}
             </Button>
+            <Button
+              mode="text"
+              style={{ marginTop: 12, marginBottom: 24 }}
+              onPress={this.handleSignUp}
+            >
+              {'Inscription'}
+            </Button>
+
+            <SocialIcon title="Sign In With Facebook" button type="facebook" />
           </View>
-        )}
-      </View>
+        </View>
+      </ImageBackground>
     );
   }
 }

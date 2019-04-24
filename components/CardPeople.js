@@ -29,7 +29,7 @@ export default class CardPeople extends Component {
 
   render() {
     return (
-      <View style={[styles.row, styles.card]}>
+      <View style={[styles.row, styles.CardPeople]}>
         <Avatar.Image
           size={64}
           source={require('../assets/test/florence.jpg')}

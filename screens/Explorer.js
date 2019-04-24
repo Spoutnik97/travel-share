@@ -15,7 +15,7 @@ export default class Explorer extends Component {
 
   static navigationOptions = {
     title: 'Explorer',
-    headerStyle: { heigth: 56 },
+    headerStyle: { height: 56 },
   };
 
   constructor(props) {
@@ -34,10 +34,11 @@ export default class Explorer extends Component {
           <Icon name="airplanemode-active" size={32} color={colors.grey_dark} />
           <View style={styles.column}>
             <TextInput
-              mode="outlined"
+              mode="flat"
               label="Où allez-vous aujourd'hui ?"
               placeholder="New York"
               value={this.state.where}
+              style={styles.input}
               onChangeText={value => this.setState({ where: value })}
             />
           </View>
@@ -45,15 +46,19 @@ export default class Explorer extends Component {
         <View style={styles.row}>
           <Icon name="alarm" size={32} color={colors.grey_dark} />
           <View style={styles.column}>
-            <TouchableOpacity
-              onPress={() => {
+            <TextInput
+              mode="flat"
+              label="Quand partez-vous ?"
+              placeholder="2:30 pm"
+              value={this.state.when ? this.state.when.toString() : null}
+              style={styles.input}
+              onFocus={() => {
                 this.setState({ isDateTimePickerVisible: true });
               }}
-            >
-              <Text>{this.state.date || 'Quand partez-vous ?'}</Text>
-            </TouchableOpacity>
+            />
             <DateTimePicker
               isVisible={this.state.isDateTimePickerVisible}
+              mode="datetime"
               onConfirm={date => {
                 this.setState({ when: date });
               }}
