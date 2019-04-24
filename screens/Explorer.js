@@ -15,11 +15,7 @@ export default class Explorer extends Component {
 
   static navigationOptions = {
     title: 'Explorer',
-<<<<<<< HEAD
-    headerStyle: { heigth: 56 },
-=======
     headerStyle: { height: 56 },
->>>>>>> a06681603b5c872197803de75f9d7e4d257fa89b
   };
 
   constructor(props) {
