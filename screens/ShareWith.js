@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { View, Picker, Text, TouchableOpacity, Image } from 'react-native';
+import {
+  View,
+  Picker,
+  Text,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
 import { TextInput, Title } from 'react-native-paper';
@@ -30,11 +37,23 @@ export default class ShareWithScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.row}>
+        <ScrollView>
           {[
             {
               picture: '../assets/test/pp.jpg',
               given_name: 'Florence',
+              description:
+                '45 ans - Voyage Aventure En partance pour Hanoï Disponible jusqu’à 22h',
+            },
+            {
+              picture: '../assets/test/pp.jpg',
+              given_name: 'Adeline',
+              description:
+                '45 ans - Voyage Aventure En partance pour Hanoï Disponible jusqu’à 22h',
+            },
+            {
+              picture: '../assets/test/pp.jpg',
+              given_name: 'Clara',
               description:
                 '45 ans - Voyage Aventure En partance pour Hanoï Disponible jusqu’à 22h',
             },
@@ -46,7 +65,7 @@ export default class ShareWithScreen extends Component {
               content={item.description}
             />
           ))}
-        </View>
+        </ScrollView>
       </View>
     );
   }

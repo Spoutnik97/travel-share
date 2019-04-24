@@ -6,9 +6,18 @@ const styles = StyleSheet.create({
   card: {
     elevation: 2,
     borderRadius: 12,
-    padding: 12,
     backgroundColor: colors.white,
+    margin: 12,
+    height: 175,
+    width: 175,
   },
+  CardPeople: {
+    elevation: 2,
+    borderRadius: 12,
+    backgroundColor: colors.white,
+    padding: 12,
+  },
+
   column: {
     flex: 1,
     flexDirection: 'column',
@@ -16,7 +25,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    flexDirection: 'column',
     padding: 24,
   },
 
@@ -28,6 +37,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  input: {
+    marginBottom: 12,
+    minHeight: 48,
+    backgroundColor: 'transparent',
+  },
+
   profilPicture: {
     width: 50,
     height: 50,

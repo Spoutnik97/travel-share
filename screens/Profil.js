@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 
 import colors from '../styles/colors';
@@ -19,6 +19,10 @@ export default class extends Component {
   componentDidMount() {}
 
   render() {
-    return <View />;
+    return (
+      <View>
+        <Text>New Screen</Text>
+      </View>
+    );
   }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import {
   createAppContainer,
   createStackNavigator,
+  createSwitchNavigator,
   createMaterialTopTabNavigator,
 } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
@@ -9,6 +10,11 @@ import { createMaterialBottomTabNavigator } from 'react-navigation-material-bott
 import { Icon } from 'react-native-elements';
 
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+
+import AuthLoadingScreen from './screens/AuthLoading';
+
+import SignUpScreen from './screens/SignUp';
+import SignInScreen from './screens/SignIn';
 
 import ExplorerScreen from './screens/Explorer';
 import ShareWithScreen from './screens/ShareWith';
@@ -30,6 +36,17 @@ const theme = {
     accent: '#f1c40f',
   },
 };
+
+const AuthStackNavigator = createStackNavigator(
+  {
+    SignIn: { screen: SignInScreen },
+    SignUp: { screen: SignUpScreen },
+  },
+  {
+    initialRouteName: 'SignIn',
+    headerMode: 'none',
+  }
+);
 
 const ExplorerStackNavigator = createStackNavigator({
   ExplorerHome: { screen: ExplorerScreen },
@@ -130,7 +147,18 @@ const TabNavigator = createMaterialBottomTabNavigator(
   }
 );
 
-const Navigator = createAppContainer(TabNavigator);
+const AuthNavigator = createSwitchNavigator(
+  {
+    AuthLoading: AuthLoadingScreen,
+    App: TabNavigator,
+    Auth: AuthStackNavigator,
+  },
+  {
+    initialRouteName: 'AuthLoading',
+  }
+);
+
+const Navigator = createAppContainer(AuthNavigator);
 
 export default class App extends React.Component {
   render() {

@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 
 import { TextInput, Title } from 'react-native-paper';
 
+import Fire from '../Fire';
+import { GiftedChat } from 'react-native-gifted-chat';
+
 import colors from '../styles/colors';
 import styles from '../styles/styles';
 
@@ -15,21 +18,32 @@ export default class extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      messages: [],
+    };
   }
 
-  componentDidMount() {}
+  omponentDidMount() {
+    Fire.shared.on(message =>
+      this.setState(previousState => ({
+        messages: GiftedChat.append(previousState.messages, message),
+      }))
+    );
+  }
+  componentWillUnmount() {
+    Fire.shared.off();
+  }
 
   render() {
     return (
-      <View style={{}}>
-        <TextInput
-          label="Où allez-vous aujourd'hui ?"
-          placeholder="New York"
-          value={this.state.where}
-          onChangeText={value => this.setState({ where: value })}
-        />
-      </View>
+      <GiftedChat
+        messages={this.state.messages}
+        onSend={Fire.shared.send}
+        user={{
+          name: 'Guillaume',
+          _id: Fire.shared.uid,
+        }}
+      />
     );
   }
 }
