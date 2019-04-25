@@ -28,12 +28,25 @@ export default class ServiceCategoryScrollView extends Component {
         <Title>{this.props.header}</Title>
         <ScrollView horizontal>
           {this.props.data.map(item => (
-            <Card key={item.name}>
+            <Card key={item.name} style={styles.card}>
+              <Card.Cover
+                source={item.picture ? { uri: item.picture } : null}
+                resizeMode="center"
+                style={{
+                  width: 175,
+                  height: 90,
+                  borderTopRightRadius: 12,
+                  borderTopLeftRadius: 12,
+                }}
+              />
               <Card.Content>
-                <Title>{item.name}</Title>
-                <Paragraph>{item.description}</Paragraph>
+                <Title numberOfLines={1} ellipsizeMode="tail">
+                  {item.name}
+                </Title>
+                <Paragraph numberOfLines={2} ellipsizeMode="tail">
+                  {item.description}
+                </Paragraph>
               </Card.Content>
-              <Card.Cover source={item.picture} />
             </Card>
           ))}
         </ScrollView>

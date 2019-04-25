@@ -1,4 +1,6 @@
-import firebase from 'firebase'; // 4.8.1
+import firebase from 'firebase';
+
+import firebaseConfig from './keys/firebase';
 
 class Fire {
   constructor() {
@@ -6,15 +8,7 @@ class Fire {
     this.observeAuth();
   }
 
-  init = () =>
-    firebase.initializeApp({
-      apiKey: 'AIzaSyDXlNyspXObjRkUqydBMpbxvsHkV2md-E0',
-      authDomain: 'travelshare-97.firebaseapp.com',
-      databaseURL: 'https://travelshare-97.firebaseio.com',
-      projectId: 'travelshare-97',
-      storageBucket: 'travelshare-97.appspot.com',
-      messagingSenderId: '547960869443',
-    });
+  init = () => firebase.initializeApp(firebaseConfig);
 
   observeAuth = () =>
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
