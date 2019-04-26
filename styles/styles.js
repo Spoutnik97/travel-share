@@ -3,6 +3,8 @@ import { StyleSheet } from 'react-native';
 import colors from './colors';
 
 const styles = StyleSheet.create({
+  HEADER_HEIGHT: 38,
+
   card: {
     elevation: 2,
     borderRadius: 12,

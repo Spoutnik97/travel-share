@@ -23,34 +23,39 @@ export default class ServiceCategoryScrollView extends Component {
   componentDidMount() {}
 
   render() {
-    return (
-      <View>
-        <Title>{this.props.header}</Title>
-        <ScrollView horizontal>
-          {this.props.data.map(item => (
-            <Card key={item.name} style={styles.card}>
-              <Card.Cover
-                source={item.picture ? { uri: item.picture } : null}
-                resizeMode="center"
-                style={{
-                  width: 175,
-                  height: 90,
-                  borderTopRightRadius: 12,
-                  borderTopLeftRadius: 12,
-                }}
-              />
-              <Card.Content>
-                <Title numberOfLines={1} ellipsizeMode="tail">
-                  {item.name}
-                </Title>
-                <Paragraph numberOfLines={2} ellipsizeMode="tail">
-                  {item.description}
-                </Paragraph>
-              </Card.Content>
-            </Card>
-          ))}
-        </ScrollView>
-      </View>
-    );
+    const { data } = this.props;
+
+    if (data.length > 0) {
+      return (
+        <View>
+          <Title style={{ marginLeft: 12 }}>{this.props.header}</Title>
+          <ScrollView horizontal>
+            {this.props.data.map(item => (
+              <Card key={item.name} style={styles.card}>
+                <Card.Cover
+                  source={item.picture ? { uri: item.picture } : null}
+                  resizeMode="center"
+                  style={{
+                    width: 175,
+                    height: 90,
+                    borderTopRightRadius: 12,
+                    borderTopLeftRadius: 12,
+                  }}
+                />
+                <Card.Content>
+                  <Title numberOfLines={1} ellipsizeMode="tail">
+                    {item.name}
+                  </Title>
+                  <Paragraph numberOfLines={2} ellipsizeMode="tail">
+                    {item.description}
+                  </Paragraph>
+                </Card.Content>
+              </Card>
+            ))}
+          </ScrollView>
+        </View>
+      );
+    }
+    return null;
   }
 }

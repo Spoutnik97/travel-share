@@ -17,7 +17,7 @@ export default class Explorer extends Component {
     title: 'Bienvenue sur Travel&Share',
     headerStyle: {
       backgroundColor: colors.primary,
-      height: 38,
+      height: styles.HEADER_HEIGHT,
       verticalAlign: 'center',
     },
     headerTintColor: '#fff',

@@ -15,6 +15,16 @@ export default class Conversation extends Component {
 
   static defaultProps = {};
 
+  static navigationOptions = ({ navigation, navigationOptions }) => ({
+    title: navigation.state.params.name,
+    headerStyle: {
+      backgroundColor: colors.primary,
+      height: styles.HEADER_HEIGHT,
+      verticalAlign: 'center',
+    },
+    headerTintColor: '#fff',
+  });
+
   constructor(props) {
     super(props);
 
@@ -22,6 +32,9 @@ export default class Conversation extends Component {
   }
 
   componentDidMount() {
+    const { navigation } = this.props;
+    const conversation = navigation.getParam('conversation', { messages: [] });
+    this.setState({ messages: conversation.messages });
     Fire.shared.on(message =>
       this.setState(previousState => ({
         messages: GiftedChat.append(previousState.messages, message),
