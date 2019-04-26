@@ -21,9 +21,13 @@ import ShareWithScreen from './screens/ShareWith';
 import AirportsMapScreen from './screens/AirportsMap';
 import AirportsServicesScreen from './screens/AirportsServices';
 import AirportsTipsScreen from './screens/AirportsTips';
-import MessagesScreen from './screens/Messages';
+
+import ConversationScreen from './screens/Conversation';
+import ContactsScreen from './screens/Contacts';
+
 import ProfilScreen from './screens/Profil';
-import TipsScreen from './screens/Tips';
+import FavoritesScreen from './screens/Favorites';
+import AdvicedScreen from './screens/Adviced';
 
 import colors from './styles/colors';
 
@@ -53,11 +57,31 @@ const ExplorerStackNavigator = createStackNavigator({
   ShareWith: { screen: ShareWithScreen },
 });
 
+const MessagesStackNavigator = createStackNavigator({
+  Contacts: { screen: ContactsScreen },
+  Conversation: { screen: ConversationScreen },
+});
+
 const AirportsTabNavigator = createMaterialTopTabNavigator(
   {
     Map: { screen: AirportsMapScreen },
     Services: { screen: AirportsServicesScreen },
     Tips: { screen: AirportsTipsScreen },
+  },
+  {
+    swipeEnabled: true,
+    tapBarOptions: {
+      activeTintColor: colors.white,
+      inactiveColor: colors.grey_dark,
+      pressColor: colors.primary,
+    },
+  }
+);
+
+const TipsTabNavigator = createMaterialTopTabNavigator(
+  {
+    favorites: { screen: FavoritesScreen },
+    adviced: { screen: AdvicedScreen },
   },
   {
     swipeEnabled: true,
@@ -85,7 +109,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
       },
     },
     Messages: {
-      screen: MessagesScreen,
+      screen: MessagesStackNavigator,
       navigationOptions: {
         title: 'Messages',
         tabBarIcon: ({ focused }) => (
@@ -111,7 +135,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
       },
     },
     Tips: {
-      screen: TipsScreen,
+      screen: TipsTabNavigator,
       navigationOptions: {
         title: 'Bons plans',
         tabBarIcon: ({ focused }) => (

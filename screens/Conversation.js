@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
 import PropTypes from 'prop-types';
 
+import { View } from 'react-native';
 import { TextInput, Title } from 'react-native-paper';
 
 import Fire from '../Fire';
@@ -10,7 +10,7 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import colors from '../styles/colors';
 import styles from '../styles/styles';
 
-export default class extends Component {
+export default class Conversation extends Component {
   static propTypes = {};
 
   static defaultProps = {};
@@ -18,12 +18,10 @@ export default class extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      messages: [],
-    };
+    this.state = { messages: [] };
   }
 
-  omponentDidMount() {
+  componentDidMount() {
     Fire.shared.on(message =>
       this.setState(previousState => ({
         messages: GiftedChat.append(previousState.messages, message),
@@ -33,17 +31,18 @@ export default class extends Component {
   componentWillUnmount() {
     Fire.shared.off();
   }
-
   render() {
     return (
-      <GiftedChat
-        messages={this.state.messages}
-        onSend={Fire.shared.send}
-        user={{
-          name: 'Guillaume',
-          _id: Fire.shared.uid,
-        }}
-      />
+      <View>
+        <GiftedChat
+          messages={this.state.messages}
+          onSend={Fire.shared.send}
+          user={{
+            name: 'Guillaume',
+            _id: Fire.shared.uid,
+          }}
+        />
+      </View>
     );
   }
 }

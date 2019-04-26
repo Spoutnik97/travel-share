@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
-
-import { Text, View } from 'react-native';
 
 import colors from '../styles/colors';
 import styles from '../styles/styles';
 
-export default class Profil extends Component {
+export default class extends Component {
+  static navigationOptions = {
+    title: 'Recommandations',
+  };
+
   static propTypes = {};
 
   static defaultProps = {};
@@ -20,10 +23,6 @@ export default class Profil extends Component {
   componentDidMount() {}
 
   render() {
-    return (
-      <View>
-        <Text>New Screen</Text>
-      </View>
-    );
+    return <View />;
   }
 }

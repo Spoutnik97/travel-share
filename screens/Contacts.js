@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { TextInput, Title } from 'react-native-paper';
+
+import Fire from '../Fire';
+import { GiftedChat } from 'react-native-gifted-chat';
 
 import colors from '../styles/colors';
 import styles from '../styles/styles';
 
-export default class Profil extends Component {
+export default class Contacts extends Component {
   static propTypes = {};
 
   static defaultProps = {};
@@ -17,13 +21,7 @@ export default class Profil extends Component {
     this.state = {};
   }
 
-  componentDidMount() {}
-
   render() {
-    return (
-      <View>
-        <Text>New Screen</Text>
-      </View>
-    );
+    return <View />;
   }
 }

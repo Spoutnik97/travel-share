@@ -5,14 +5,7 @@ import firebase from 'firebase';
 
 import { AsyncStorage, Image, ImageBackground, Text, View } from 'react-native';
 import { SocialIcon } from 'react-native-elements';
-import {
-  Button,
-  Subheading,
-  TextInput,
-  Headline,
-  FAB,
-} from 'react-native-paper';
-import { Container, Content } from 'native-base';
+import { Button, Subheading, TextInput, Headline } from 'react-native-paper';
 
 import colors from '../styles/colors';
 import styles from '../styles/styles';

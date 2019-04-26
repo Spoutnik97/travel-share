@@ -14,8 +14,13 @@ export default class Explorer extends Component {
   static defaultProps = {};
 
   static navigationOptions = {
-    title: 'Explorer',
-    headerStyle: { height: 56 },
+    title: 'Bienvenue sur Travel&Share',
+    headerStyle: {
+      backgroundColor: colors.primary,
+      height: 38,
+      verticalAlign: 'center',
+    },
+    headerTintColor: '#fff',
   };
 
   constructor(props) {
@@ -31,7 +36,12 @@ export default class Explorer extends Component {
       <View style={styles.container}>
         <Title>{'Quelques informations avant de partager'}</Title>
         <View style={styles.row}>
-          <Icon name="airplanemode-active" size={32} color={colors.grey_dark} />
+          <Icon
+            name="airplanemode-active"
+            size={32}
+            color={colors.grey_dark}
+            style={{ marginRight: 24 }}
+          />
           <View style={styles.column}>
             <TextInput
               mode="flat"
@@ -44,7 +54,12 @@ export default class Explorer extends Component {
           </View>
         </View>
         <View style={styles.row}>
-          <Icon name="alarm" size={32} color={colors.grey_dark} />
+          <Icon
+            name="alarm"
+            size={32}
+            color={colors.grey_dark}
+            style={{ marginRight: 24 }}
+          />
           <View style={styles.column}>
             <TextInput
               mode="flat"
@@ -69,19 +84,29 @@ export default class Explorer extends Component {
           </View>
         </View>
         <View style={styles.row}>
-          <Icon name="person" size={32} color={colors.grey_dark} />
+          <Icon
+            name="person"
+            size={32}
+            color={colors.grey_dark}
+            style={{ marginRight: 24 }}
+          />
           <View style={styles.column}>
             <Picker
+              mode="dropdown"
               selectedValue={this.state.travelerType}
-              onValueChange={itemValue =>
-                this.setState({ travelerType: itemValue })
-              }
+              onValueChange={({ itemValue, itemPosition }) => {
+                if (itemPosition !== 0)
+                  this.setState({ travelerType: itemValue });
+              }}
             >
-              {['BackPacker', "Voyageur d'affaire", 'Famille'].map(
-                (item, itemIndex) => (
-                  <Picker.Item key={item} label={item} value={itemIndex} />
-                )
-              )}
+              {[
+                'Sélectionner un type de voyageur',
+                'BackPacker',
+                "Voyageur d'affaire",
+                'Famille',
+              ].map((item, itemIndex) => (
+                <Picker.Item key={item} label={item} value={itemIndex} />
+              ))}
             </Picker>
           </View>
         </View>
