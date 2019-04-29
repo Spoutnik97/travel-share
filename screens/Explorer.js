@@ -112,7 +112,7 @@ export default class Explorer extends Component {
         </View>
         <Button
           mode="contained"
-          onPress={() => this.props.navigation.navigate('ShareWith')}
+          onPress={() => this.props.navigation.navigate('shareWith')}
         >
           Rencontrer
         </Button>
