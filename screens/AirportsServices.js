@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
-import { ScrollView, View } from 'react-native';
 import PropTypes from 'prop-types';
+
+import { ScrollView, View } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+
 import { ServiceCategoryScrollView } from '../components/rn-travel-share';
 
 import colors from '../styles/colors';
 import styles from '../styles/styles';
 
 const SERVICES_TYPES = ['restaurant', 'atm', 'chill'];
+const SERVICES_LABELS = {
+  restaurant: 'Restaurants',
+  chill: 'Espaces détente',
+  atm: 'Distributeurs',
+};
 
 const services_test = [
   {
@@ -93,7 +100,7 @@ export default class AirportsServices extends Component {
           filteredServices.map(type => (
             <ServiceCategoryScrollView
               key={type.header}
-              header={type.header}
+              header={SERVICES_LABELS[type.header]}
               data={type.services}
             />
           ))}

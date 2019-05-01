@@ -21,9 +21,15 @@ import ShareWithScreen from './screens/ShareWith';
 import AirportsMapScreen from './screens/AirportsMap';
 import AirportsServicesScreen from './screens/AirportsServices';
 import AirportsTipsScreen from './screens/AirportsTips';
-import MessagesScreen from './screens/Messages';
+
+import ConversationScreen from './screens/Conversation';
+import ContactsScreen from './screens/Contacts';
+
 import ProfilScreen from './screens/Profil';
-import TipsScreen from './screens/Tips';
+import FavoritesScreen from './screens/Favorites';
+import AdvicedScreen from './screens/Adviced';
+
+import ServiceDetailsScreen from './screens/ServiceDetails';
 
 import colors from './styles/colors';
 
@@ -49,15 +55,43 @@ const AuthStackNavigator = createStackNavigator(
 );
 
 const ExplorerStackNavigator = createStackNavigator({
-  ExplorerHome: { screen: ExplorerScreen },
-  ShareWith: { screen: ShareWithScreen },
+  explorerHome: { screen: ExplorerScreen },
+  shareWith: { screen: ShareWithScreen },
+});
+
+const MessagesStackNavigator = createStackNavigator({
+  contacts: { screen: ContactsScreen },
+  conversation: { screen: ConversationScreen },
+});
+
+const TipsTabNavigator = createMaterialTopTabNavigator(
+  {
+    myFavorites: { screen: FavoritesScreen },
+    adviced: { screen: AdvicedScreen },
+  },
+  {
+    swipeEnabled: true,
+    tapBarOptions: {
+      activeTintColor: colors.white,
+      inactiveColor: colors.grey_dark,
+      pressColor: colors.primary,
+    },
+  }
+);
+
+const FavoritesStackNavigator = createStackNavigator({
+  favoritesHome: {
+    screen: TipsTabNavigator,
+    navigationOptions: { headerTransparent: true },
+  },
+  serviceDetails: { screen: ServiceDetailsScreen },
 });
 
 const AirportsTabNavigator = createMaterialTopTabNavigator(
   {
     Map: { screen: AirportsMapScreen },
     Services: { screen: AirportsServicesScreen },
-    Tips: { screen: AirportsTipsScreen },
+    AirportsTips: { screen: AirportsTipsScreen },
   },
   {
     swipeEnabled: true,
@@ -85,7 +119,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
       },
     },
     Messages: {
-      screen: MessagesScreen,
+      screen: MessagesStackNavigator,
       navigationOptions: {
         title: 'Messages',
         tabBarIcon: ({ focused }) => (
@@ -110,8 +144,8 @@ const TabNavigator = createMaterialBottomTabNavigator(
         ),
       },
     },
-    Tips: {
-      screen: TipsScreen,
+    Favorites: {
+      screen: FavoritesStackNavigator,
       navigationOptions: {
         title: 'Bons plans',
         tabBarIcon: ({ focused }) => (
@@ -140,7 +174,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
   {
     labeled: true,
     initialRouteName: 'Explorer',
-    order: ['Profil', 'Tips', 'Airports', 'Messages', 'Explorer'],
+    order: ['Profil', 'Favorites', 'Airports', 'Messages', 'Explorer'],
     activeColor: colors.primary,
     inactiveColor: colors.grey_dark,
     barStyle: { backgroundColor: colors.grey_light },

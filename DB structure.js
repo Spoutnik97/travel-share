@@ -49,11 +49,9 @@
   },
   conversations: {
     conv1: {
+      id: String,
       name: String,
-      members: {
-        user1: true,
-        user3: true;
-      },
+      members: ['user1', 'user3'],
       created_at: Date,
       messages: {
         mess1: {
@@ -69,6 +67,7 @@
       },
       last_message: String,
       last_message_time: Date,
+      last_message_sender: String,
     },
    },
    airports: {
