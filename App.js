@@ -1,4 +1,5 @@
 import React from 'react';
+import { YellowBox } from 'react-native';
 import {
   createAppContainer,
   createStackNavigator,
@@ -32,6 +33,9 @@ import AdvicedScreen from './screens/Adviced';
 import ServiceDetailsScreen from './screens/ServiceDetails';
 
 import colors from './styles/colors';
+import styles from './styles/styles';
+
+YellowBox.ignoreWarnings(['Setting a timer']);
 
 const theme = {
   ...DefaultTheme,
@@ -54,10 +58,22 @@ const AuthStackNavigator = createStackNavigator(
   }
 );
 
-const ExplorerStackNavigator = createStackNavigator({
-  explorerHome: { screen: ExplorerScreen },
-  shareWith: { screen: ShareWithScreen },
-});
+const ExplorerStackNavigator = createStackNavigator(
+  {
+    explorerHome: { screen: ExplorerScreen },
+    shareWith: { screen: ShareWithScreen },
+  },
+  {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: colors.primary,
+        height: styles.HEADER_HEIGHT,
+      },
+      // headerTitleStyle: { paddingBottom: 20 },
+      headerTintColor: '#fff',
+    },
+  }
+);
 
 const MessagesStackNavigator = createStackNavigator({
   contacts: { screen: ContactsScreen },

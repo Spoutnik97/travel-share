@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import firebase from 'firebase';
+
 import { AsyncStorage, Text, View } from 'react-native';
+
+import firebaseConfig from '../keys/firebase';
 
 import colors from '../styles/colors';
 import styles from '../styles/styles';
@@ -13,8 +17,17 @@ export default class AuthLoading extends Component {
 
   constructor(props) {
     super(props);
+    this.initFirebase();
     this.bootstrapAsync();
   }
+
+  initFirebase = () => {
+    try {
+      firebase.initializeApp(firebaseConfig);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   // Fetch the token from storage then navigate to our appropriate place
   bootstrapAsync = async () => {

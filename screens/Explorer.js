@@ -13,15 +13,10 @@ export default class Explorer extends Component {
 
   static defaultProps = {};
 
-  static navigationOptions = {
+  static navigationOptions = ({ navigationOptions }) => ({
     title: 'Bienvenue sur Travel&Share',
-    headerStyle: {
-      backgroundColor: colors.primary,
-      height: styles.HEADER_HEIGHT,
-      verticalAlign: 'center',
-    },
-    headerTintColor: '#fff',
-  };
+    ...navigationOptions,
+  });
 
   constructor(props) {
     super(props);

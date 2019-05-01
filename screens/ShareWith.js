@@ -43,9 +43,10 @@ export default class ShareWithScreen extends Component {
 
   static defaultProps = {};
 
-  static navigationOptions = {
-    title: 'Partager avec ...',
-  };
+  static navigationOptions = ({ navigationOptions }) => ({
+    title: 'Partager avec...',
+    ...navigationOptions,
+  });
 
   constructor(props) {
     super(props);

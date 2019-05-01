@@ -23,8 +23,6 @@ import {
 import colors from '../styles/colors';
 import styles from '../styles/styles';
 
-import firebaseConfig from '../keys/firebase';
-
 const imageBackground = require('../assets/background.jpg');
 const imageLogo = require('../assets/logo.png');
 
@@ -35,20 +33,11 @@ export default class SignIn extends Component {
 
   constructor(props) {
     super(props);
-    this.initFirebase();
-    // this.observeAuth();
+
     this.state = {
-      signup: true,
+      signup: false,
     };
   }
-
-  initFirebase = () => {
-    try {
-      firebase.initializeApp(firebaseConfig);
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
 
   observeAuth = () =>
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
@@ -81,7 +70,7 @@ export default class SignIn extends Component {
           // await AsyncStorage.setItem('password', password);
           this.props.navigation.navigate('App');
         })
-        .catch(function(error) {
+        .catch(error => {
           var errorCode = error.code;
           var errorMessage = error.message;
 
@@ -131,10 +120,10 @@ export default class SignIn extends Component {
         // await AsyncStorage.setItem('password', password);
         this.props.navigation.navigate('App');
       })
-      .catch(function(error) {
+      .catch(error => {
         var errorCode = error.code;
         var errorMessage = error.message;
-
+        console.log(errorCode + ' : ' + errorMessage);
         if (errorCode === 'auth/wrong-password') {
           this.setState({ password_error: true });
         } else if (errorCode === 'auth/invalid-email') {
@@ -174,7 +163,7 @@ export default class SignIn extends Component {
         style={{ width: '100%', height: '100%' }}
         imageStyle={{ resizeMode: 'cover' }}
       >
-        <ScrollView style={styles.container}>
+        <ScrollView keyboardShouldPersistTaps="always" style={styles.container}>
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Headline>{'Travel&Share'}</Headline>
             <Image source={imageLogo} style={{ width: 100, height: 100 }} />
