@@ -180,7 +180,7 @@ export default class SignIn extends Component {
             <Button
               mode="text"
               style={{ marginTop: 12, marginBottom: 24 }}
-              onPress={this.handleSignUp}
+              onPress={this.handleSignUpEmail}
             >
               {'Inscription'}
             </Button>
