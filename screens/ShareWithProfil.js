@@ -16,9 +16,7 @@ import styles from '../styles/styles';
 import languagesDictionnary from '../assets/dictionnaries/languages';
 
 export default class ShareWithProfil extends Component {
-  static propTypes = {
-    user: PropTypes.object.isRequired,
-  };
+  static propTypes = {};
 
   static defaultProps = {};
 
@@ -53,18 +51,19 @@ export default class ShareWithProfil extends Component {
         >{`Envoyer un message à ${user.given_name}`}</Button>
 
         <Subheading>{`A déjà visité ${
-          user.countries_visited.length
+          user.countries_visited ? user.countries_visited.length : 0
         } pays`}</Subheading>
         <Subheading>Parle</Subheading>
-        {user.languages.map(language => {
-          <View style={styles.row}>
-            <Image
-              source={{ uri: languagesDictionnary[language].flag }}
-              style={{ width: 40, height: 20 }}
-            />
-            <Paragraph>{languagesDictionnary[language].label}</Paragraph>
-          </View>;
-        })}
+        {user.languages &&
+          user.languages.map(language => {
+            <View style={styles.row}>
+              <Image
+                source={{ uri: languagesDictionnary[language].flag }}
+                style={{ width: 40, height: 20 }}
+              />
+              <Paragraph>{languagesDictionnary[language].label}</Paragraph>
+            </View>;
+          })}
       </View>
     );
   }

@@ -25,8 +25,9 @@ export default class ProgressBar extends Component {
     const { progress } = this.props;
     return (
       <View style={styles.row}>
-        {[20, 40, 60, 80, 100].map(percentage => {
+        {[20, 40, 60, 80, 100].map(percentage => (
           <View
+            key={percentage}
             style={[
               styles.progressBarDiv,
               {
@@ -34,8 +35,8 @@ export default class ProgressBar extends Component {
                   progress >= percentage ? colors.primary : colors.grey_light,
               },
             ]}
-          />;
-        })}
+          />
+        ))}
       </View>
     );
   }

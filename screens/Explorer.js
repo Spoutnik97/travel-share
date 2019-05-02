@@ -88,7 +88,6 @@ export default class Explorer extends Component {
           <View style={styles.column}>
             <Picker
               mode="dropdown"
-              selectedValue={this.state.travelerType}
               onValueChange={({ itemValue, itemPosition }) => {
                 if (itemPosition !== 0)
                   this.setState({ travelerType: itemValue });

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { AsyncStorage, Text, View } from 'react-native';
+import firebase from 'firebase';
+import '@firebase/firestore';
+
+import { AsyncStorage, ScrollView, Text, View } from 'react-native';
 import { Avatar, Button, TextInput } from 'react-native-paper';
 
 import DateTimePicker from 'react-native-modal-datetime-picker';
@@ -16,120 +19,140 @@ import firebaseConfig from '../keys/firebase';
 import labelDictionnary from '../assets/dictionnaries/labels';
 import languagesDictionnary from '../assets/dictionnaries/languages';
 
-const userData = [
-  'given_name',
-  'birthdate',
-  'email',
-  'resume',
-  'languages',
-  'countries_visited',
-  'countries_dreamed',
-];
-
 export default class EditProfil extends Component {
   static propTypes = {};
 
   static defaultProps = {};
 
+  static navigationOptions = {
+    title: 'Modifier mon profil',
+  };
+
   constructor(props) {
     super(props);
 
+    const { user } = this.props.navigation.state.params;
     this.state = {
-      user: {},
+      user: user || {},
+      userData: [
+        'given_name',
+        'birthdate',
+        'email',
+        'resume',
+        'languages',
+        'countries_visited',
+        'countries_dreamed',
+      ],
       readyToRender: false,
     };
   }
 
   handleSave = () => {
     let user = {};
-    userData.forEach(label => {
+    this.state.userData.forEach(label => {
       user[label] = this.state[label] || this.state.user[label] || null;
+      if (label === 'email' && user[label] === 'guipiedi@gmail.com') {
+        user.admin = true;
+      }
     });
 
-    AsyncStorage.setItem('user', JSON.stringify(user)).then(() => {
-      this.props.navigation.state.params.onGoBack();
-      this.props.navigation.goBack();
-    });
+    let userOnline = firebase.auth().currentUser;
+
+    userOnline
+      .updateProfile(user)
+      .then(() => {
+        AsyncStorage.setItem('user', JSON.stringify(user)).then(() => {
+          this.props.navigation.state.params.onGoBack();
+          this.props.navigation.goBack();
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   componentDidMount() {
-    AsyncStorage.getItem('user').then(user => {
-      this.setState({ user: JSON.parse(user), readyToRender: true });
-    });
+    // AsyncStorage.getItem('user').then(user => {
+    //   this.setState({ user: JSON.parse(user), readyToRender: true });
+    // });
   }
 
   render() {
-    const { user, readyToRender } = this.state;
-    if (readyToRender) {
-      return (
-        <View style={styles.container}>
+    const { user } = this.state;
+    return (
+      <View style={styles.container}>
+        <ScrollView
+          style={styles.container}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.center}>
             <Avatar.Image size={128} source={{ uri: user.picture }} />
           </View>
 
-          {userData.map(label => {
-            if (label === 'languages') {
+          <View>
+            {this.state.userData.map(label => {
+              // if (label === 'languages') {
+              //   return (
+              //     <View key={label}>
+              //       <TextInput
+              //         mode="flat"
+              //         multiline={label === 'resume'}
+              //         label={labelDictionnary[label]}
+              //         value={this.state[label] || user[label]}
+              //         style={styles.input}
+              //         error={this.state[`${label}_error`]}
+              //         onFocus={() => {
+              //           this.setState({ languagesModalVisible: true });
+              //         }}
+              //       />
+              //       <CheckBoxModal
+              //         visible={this.state.languagesModalVisible}
+              //         values={['fr', 'en', 'cn']}
+              //         labels={['fr', 'en', 'cn'].map(
+              //           code => languagesDictionnary[code].label
+              //         )}
+              //         onRequestClose={() => {
+              //           this.setState({ languagesModalVisible: false });
+              //         }}
+              //         onConfirm={list => {
+              //           this.setState({ languages: list });
+              //         }}
+              //       />
+              //     </View>
+              //   );
+              // }
               return (
-                <View>
-                  <TextInput
-                    key={label}
-                    mode="flat"
-                    multiline={label === 'resume'}
-                    label={labelDictionnary[label]}
-                    value={this.state[label]}
-                    style={styles.input}
-                    error={this.state[`${label}_error`]}
-                    onFocus={() => {
-                      this.setState({ languagesModalVisible: true });
-                    }}
-                  />
-                  <CheckBoxModal
-                    visible={this.state.languagesModalVisible}
-                    values={['fr', 'en', 'cn']}
-                    labels={['fr', 'en', 'cn'].map(
-                      code => languagesDictionnary[code].label
-                    )}
-                    onRequestClose={() => {
-                      this.setState({ languagesModalVisible: false });
-                    }}
-                    onConfirm={list => {
-                      this.setState({ languages: list });
-                    }}
-                  />
-                </View>
+                <TextInput
+                  key={label}
+                  mode="flat"
+                  multiline={label === 'resume'}
+                  label={labelDictionnary[label]}
+                  value={this.state[label] || user[label] || ''}
+                  style={styles.input}
+                  error={this.state[`${label}_error`]}
+                  onFocus={
+                    label === 'birthdate'
+                      ? () => {
+                          this.setState({ isDateTimePickerVisible: true });
+                        }
+                      : () => {}
+                  }
+                  onChangeText={value => this.setState({ [label]: value })}
+                />
               );
-            }
-            return (
-              <TextInput
-                key={label}
-                mode="flat"
-                multiline={label === 'resume'}
-                label={labelDictionnary[label]}
-                value={this.state[label]}
-                style={styles.input}
-                error={this.state[`${label}_error`]}
-                onFocus={
-                  label === 'birthdate'
-                    ? () => {
-                        this.setState({ isDateTimePickerVisible: true });
-                      }
-                    : () => {}
-                }
-                onChangeText={value => this.setState({ [label]: value })}
-              />
-            );
-          })}
+            })}
 
-          <DateTimePicker
-            isVisible={this.state.isDateTimePickerVisible}
-            mode="date"
-            onConfirm={date => {
-              this.setState({ birthdate: date });
-            }}
-            onCancel={() => {
-              this.setState({ isDateTimePickerVisible: false });
-            }}
-          />
+            <DateTimePicker
+              isVisible={this.state.isDateTimePickerVisible}
+              mode="date"
+              onConfirm={date => {
+                this.setState({ birthdate: date });
+              }}
+              onCancel={() => {
+                this.setState({ isDateTimePickerVisible: false });
+              }}
+            />
+          </View>
 
           <Button
             mode="contained"
@@ -138,9 +161,8 @@ export default class EditProfil extends Component {
           >
             Enregistrer
           </Button>
-        </View>
-      );
-    }
-    return <View />;
+        </ScrollView>
+      </View>
+    );
   }
 }

@@ -53,10 +53,9 @@ const styles = StyleSheet.create({
   },
 
   progressBarDiv: {
-    width: '15%',
-    height: 28,
+    width: 50,
+    height: 20,
     marginBottom: 12,
-    marginTop: 12,
     marginRight: 12,
   },
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { AsyncStorage, Text, View } from 'react-native';
+import { AsyncStorage, ScrollView, Text, View } from 'react-native';
 import {
   Avatar,
   Button,
@@ -22,6 +22,10 @@ export default class Profil extends Component {
   static propTypes = {};
 
   static defaultProps = {};
+
+  static navigationOptions = {
+    title: 'Mon profil',
+  };
 
   constructor(props) {
     super(props);
@@ -47,50 +51,70 @@ export default class Profil extends Component {
     if (readyToRender) {
       return (
         <View style={styles.container}>
-          <View style={styles.center}>
-            <Avatar.Image size={128} source={{ uri: user.picture }} />
-            <Headline>{`${user.given_name}, ${Date.now().getYear() -
-              user.birthdate.getYear()}`}</Headline>
-          </View>
-
-          <View style={styles.row}>
-            <View style={[styles.column, styles.center]}>
-              <Title>Rencontres</Title>
-              <Paragraph>{user.meets.length}</Paragraph>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.center}>
+              <Avatar.Image size={128} source={{ uri: user.picture }} />
+              <Headline>
+                {user.birthdate
+                  ? `${user.given_name}, ${Date.now().getFullYear() -
+                      user.birthdate.getFullYear()}`
+                  : user.given_name}
+              </Headline>
             </View>
-            <View style={[styles.column, styles.center]}>
-              <Title>Bons plans</Title>
-              <Paragraph>{user.good_plans_saved.length}</Paragraph>
+
+            <View style={styles.row}>
+              <View style={[styles.column, styles.center]}>
+                <Title>Rencontres</Title>
+                <Paragraph>{user.meets ? user.meets.length : 0}</Paragraph>
+              </View>
+              <View style={[styles.column, styles.center]}>
+                <Title>Bons plans</Title>
+                <Paragraph>
+                  {user.good_plans_saved ? user.good_plans_saved.length : 0}
+                </Paragraph>
+              </View>
+              <View style={[styles.column, styles.center]}>
+                <Title>Points</Title>
+                <Paragraph>{user.points || 0}</Paragraph>
+              </View>
             </View>
-            <View style={[styles.column, styles.center]}>
-              <Title>Points</Title>
-              <Paragraph>{user.points}</Paragraph>
+
+            <View style={styles.row}>
+              <Subheading>{`Votre profil est complet à `}</Subheading>
+              <Subheading style={{ color: colors.primary }}>{'60%'}</Subheading>
             </View>
-          </View>
+            <ProgressBar progress={60} />
 
-          <View style={styles.row}>
-            <Subheading>{`Votre profil est complet à `}</Subheading>
-            <Subheading style={{ color: colors.primary }}>{'60%'}</Subheading>
-          </View>
-          <ProgressBar progress={60} />
+            <Title>Résumé</Title>
+            <Paragraph>
+              {user.resume ||
+                'Complétez votre résumé pour que les autres voyageurs puissent en connaître un peu plus sur vous avant de vous rencontrer'}
+            </Paragraph>
 
-          <Title>Résumé</Title>
-          <Paragraph>{user.resume}</Paragraph>
-
-          <Button
-            mode="text"
-            icon="create"
-            onPress={() => {
-              this.props.navigation.navigate('editProfil', {
-                onGoBack: () => this.refresh(),
-              });
-            }}
-          >
-            Modifier mes informations
-          </Button>
-          <Button mode="text" icon="setting" onPress={() => {}}>
-            Réglages
-          </Button>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+              }}
+            >
+              <Button
+                mode="text"
+                icon="create"
+                onPress={() => {
+                  this.props.navigation.navigate('editProfil', {
+                    user,
+                    onGoBack: () => this.refresh(),
+                  });
+                }}
+              >
+                Modifier mes informations
+              </Button>
+              <Button mode="text" icon="settings" onPress={() => {}}>
+                Réglages
+              </Button>
+            </View>
+          </ScrollView>
         </View>
       );
     }
