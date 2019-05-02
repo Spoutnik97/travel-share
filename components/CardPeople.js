@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Avatar, Title, Paragraph } from 'react-native-paper';
 import PropTypes from 'prop-types';
 
@@ -11,12 +11,14 @@ export default class CardPeople extends Component {
     picture: PropTypes.string,
     header: PropTypes.string,
     content: PropTypes.string,
+    onPress: PropTypes.func,
   };
 
   static defaultProps = {
     picture: '',
     header: '',
     content: '',
+    onPress: () => {},
   };
 
   constructor(props) {
@@ -29,7 +31,10 @@ export default class CardPeople extends Component {
 
   render() {
     return (
-      <View style={[styles.row, styles.CardPeople]}>
+      <TouchableOpacity
+        style={[styles.row, styles.CardPeople]}
+        onPress={this.props.onPress}
+      >
         <Avatar.Image
           size={64}
           source={require('../assets/test/florence.jpg')}
@@ -38,7 +43,7 @@ export default class CardPeople extends Component {
           <Title>{this.props.header}</Title>
           <Paragraph>{this.props.content}</Paragraph>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }

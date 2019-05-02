@@ -1,4 +1,5 @@
 import CardPeople from './CardPeople';
 import ServiceCategoryScrollView from './ServiceCategoryScrollView';
+import ProgressBar from './ProgressBar';
 
-export { CardPeople, ServiceCategoryScrollView };
+export { CardPeople, ProgressBar, ServiceCategoryScrollView };

@@ -18,7 +18,10 @@ import SignUpScreen from './screens/SignUp';
 import SignInScreen from './screens/SignIn';
 
 import ExplorerScreen from './screens/Explorer';
+
 import ShareWithScreen from './screens/ShareWith';
+import ShareWithProfilScreen from './screens/ShareWithProfil';
+
 import AirportsMapScreen from './screens/AirportsMap';
 import AirportsServicesScreen from './screens/AirportsServices';
 import AirportsTipsScreen from './screens/AirportsTips';
@@ -27,6 +30,7 @@ import ConversationScreen from './screens/Conversation';
 import ContactsScreen from './screens/Contacts';
 
 import ProfilScreen from './screens/Profil';
+import EditProfilScreen from './screens/EditProfil';
 import FavoritesScreen from './screens/Favorites';
 import AdvicedScreen from './screens/Adviced';
 
@@ -62,6 +66,7 @@ const ExplorerStackNavigator = createStackNavigator(
   {
     explorerHome: { screen: ExplorerScreen },
     shareWith: { screen: ShareWithScreen },
+    shareWithProfil: { screen: ShareWithProfilScreen },
   },
   {
     defaultNavigationOptions: {
@@ -70,6 +75,22 @@ const ExplorerStackNavigator = createStackNavigator(
         height: styles.HEADER_HEIGHT,
       },
       // headerTitleStyle: { paddingBottom: 20 },
+      headerTintColor: '#fff',
+    },
+  }
+);
+
+const ProfilStackNavigator = createStackNavigator(
+  {
+    profil: { screen: ProfilScreen },
+    editProfil: { screen: EditProfilScreen },
+  },
+  {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: colors.primary,
+        height: styles.HEADER_HEIGHT,
+      },
       headerTintColor: '#fff',
     },
   }
@@ -174,7 +195,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
       },
     },
     Profil: {
-      screen: ProfilScreen,
+      screen: ProfilStackNavigator,
       navigationOptions: {
         title: 'Profil',
         tabBarIcon: ({ focused }) => (

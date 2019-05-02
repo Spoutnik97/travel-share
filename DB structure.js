@@ -7,10 +7,7 @@ const db = {
       birthdate: Date,
       email: String,
       picture: URL, // link to DB
-      languages: {
-        french: true,
-        english: true,
-      },
+      languages: ['fr', 'en'],
       resume: String, // description du profil
       countries_visited: {
         france: true,
@@ -29,16 +26,8 @@ const db = {
         conv1: Date, // date de la dernière consultation
         conv3: Date,
       },
-      good_plans_saved: {
-        // bons plans enregistrés par l'utilisateur
-        place1: true,
-        place97: true,
-      },
-      good_plans_shared: {
-        // partagé par les autres utilisateurs
-        place3: true,
-        place103: true,
-      },
+      good_plans_saved: ['place1', 'place97'], // bons plans enregistrés par l'utilisateur
+      good_plans_shared: ['place3', 'place103'], // partagé par les autres utilisateurs
       points: Integer,
       meets: {
         user2: true,

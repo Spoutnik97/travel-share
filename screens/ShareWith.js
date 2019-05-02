@@ -21,19 +21,19 @@ const TEST_DATA = [
   {
     picture: '../assets/test/pp.jpg',
     given_name: 'Florence',
-    description:
+    resume:
       '45 ans - Voyage Aventure En partance pour Hanoï Disponible jusqu’à 22h',
   },
   {
     picture: '../assets/test/pp.jpg',
     given_name: 'Adeline',
-    description:
+    resume:
       '45 ans - Voyage Aventure En partance pour Hanoï Disponible jusqu’à 22h',
   },
   {
     picture: '../assets/test/pp.jpg',
     given_name: 'Clara',
-    description:
+    resume:
       '45 ans - Voyage Aventure En partance pour Hanoï Disponible jusqu’à 22h',
   },
 ];
@@ -65,7 +65,12 @@ export default class ShareWithScreen extends Component {
               key={item.given_name}
               picture={item.picture}
               header={item.given_name}
-              content={item.description}
+              content={item.resume}
+              onPress={() => {
+                this.props.navigation.navigate('shareWithProfil', {
+                  user: item,
+                });
+              }}
             />
           ))}
         </ScrollView>

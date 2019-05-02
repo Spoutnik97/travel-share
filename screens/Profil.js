@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import firebase from 'firebase';
-import '@firebase/firestore';
-
 import { AsyncStorage, Text, View } from 'react-native';
-import { Button, TextInput, Title } from 'react-native-paper';
+import {
+  Avatar,
+  Button,
+  Headline,
+  Paragraph,
+  Subheading,
+  Title,
+} from 'react-native-paper';
+
+import { ProgressBar } from '../components/rn-travel-share';
 
 import colors from '../styles/colors';
 import styles from '../styles/styles';
@@ -20,146 +26,74 @@ export default class Profil extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      user: {},
+      readyToRender: false,
+    };
   }
 
-  componentDidMount() {}
+  refresh = () => {
+    AsyncStorage.getItem('user').then(user => {
+      this.setState({ user: JSON.parse(user), readyToRender: true });
+    });
+  };
 
-  // insertAirport = () => {
-  //   const db = firebase.firestore();
-  //   console.ignoredYellowBox = ['Setting a timer'];
-  //   // firebase.initializeApp(firebaseConfig);
-  //   db.collection('airports')
-  //     .add({
-  //       name: 'Charles de Gaulle',
-  //       location: {
-  //         latitude: 49.009258, // The latitude in degrees.
-  //         longitude: 2.546245, // The longitude in degrees.
-  //         altitude: null, // The altitude in meters above the WGS 84 reference ellipsoid.
-  //       },
-  //       picture:
-  //         'https://firebasestorage.googleapis.com/v0/b/travelshare-97.appspot.com/o/airports%2Froissy.jpg?alt=media&token=36a71510-d89f-470a-934f-42f1163a2fe9',
-  //       map:
-  //         'https://firebasestorage.googleapis.com/v0/b/travelshare-97.appspot.com/o/airports%2Froissy-t1.jpg?alt=media&token=30284f96-525c-4e56-a51a-642594120aa4',
-  //     })
-  //     .then(docRef => {
-  //       console.log('Document written with ID: ', docRef.id);
-  //       db.collection('airports')
-  //         .doc(docRef.id)
-  //         .collection('services')
-  //         .add({
-  //           name: 'Le Spoutnik',
-  //           description: 'Un petit restaurant de charme...',
-  //           type: 'restaurant',
-  //           picture:
-  //             'https://firebasestorage.googleapis.com/v0/b/travelshare-97.appspot.com/o/services%2Fcafe1.jpg?alt=media&token=fe64daf5-ed4e-463c-8911-c4b44826fd46',
-  //           likes: 0,
-  //         })
-  //         .then(serviceRef => {
-  //           console.log(serviceRef.id);
-  //         });
-  //     })
-  //     .catch(function(error) {
-  //       console.error('Error adding document: ', error);
-  //     });
-  // };
-  insertAirport = () => {
-    const db = firebase.database();
-    db.ref('airports')
-      .push({
-        name: 'Charles de Gaulle',
-        location: {
-          latitude: 49.009258, // The latitude in degrees.
-          longitude: 2.546245, // The longitude in degrees.
-          altitude: null, // The altitude in meters above the WGS 84 reference ellipsoid.
-        },
-        picture:
-          'https://firebasestorage.googleapis.com/v0/b/travelshare-97.appspot.com/o/airports%2Froissy.jpg?alt=media&token=36a71510-d89f-470a-934f-42f1163a2fe9',
-        map:
-          'https://firebasestorage.googleapis.com/v0/b/travelshare-97.appspot.com/o/airports%2Froissy-t1.jpg?alt=media&token=30284f96-525c-4e56-a51a-642594120aa4',
-      })
-      .then(el => {
-        console.log(`el : ${el}`);
-      });
-  };
-  insertAirportService = () => {
-    const db = firebase.database();
-    db.ref('airports/-Ldok8iYCv7KLC37sSPa/services')
-      .push({
-        name: 'Le Spoutnik',
-        description: 'Un petit restaurant de charme...',
-        type: 'restaurant',
-        picture:
-          'https://firebasestorage.googleapis.com/v0/b/travelshare-97.appspot.com/o/services%2Fcafe1.jpg?alt=media&token=fe64daf5-ed4e-463c-8911-c4b44826fd46',
-        likes: 0,
-      })
-      .then(el => {
-        console.log(`el : ${el}`);
-      });
-    db.ref('airports/-Ldok8iYCv7KLC37sSPa/services')
-      .push({
-        name: 'Hello Cafe',
-        description: 'Un petit cafe sympa',
-        type: 'restaurant',
-        picture:
-          'https://firebasestorage.googleapis.com/v0/b/travelshare-97.appspot.com/o/services%2Fcafe2.jpg?alt=media&token=65083f6c-8304-4407-8ba7-6fd054ce265e',
-        likes: 0,
-      })
-      .then(el => {
-        console.log(`el : ${el}`);
-      });
-  };
-  // insertAirportServiceFirestore = () => {
-  //   const db = firebase.firestore();
-  //   db.collection('airports')
-  //     .where('name', '==', 'Charles de Gaulle')
-  //     .get()
-  //     .then(querySnapshot => {
-  //       querySnapshot
-  //         .forEach(doc => {
-  //           console.log(doc.id);
-  //           db.collection('airports')
-  //             .doc(doc.id)
-  //             .collection('services')
-  //             .add({
-  //               name: 'Lounge Air France',
-  //               description:
-  //                 'Espace de repos AirFrance pour les business traveller',
-  //               type: 'chill',
-  //               picture:
-  //                 'https://firebasestorage.googleapis.com/v0/b/travelshare-97.appspot.com/o/services%2Fcafe2.jpg?alt=media&token=65083f6c-8304-4407-8ba7-6fd054ce265e',
-  //               likes: 0,
-  //             })
-  //             .then(serviceRef => {
-  //               console.log(serviceRef.id);
-  //             })
-  //             .catch(error => {
-  //               console.log('Error adding document: ', error);
-  //             });
-  //         })
-  //         .catch(error => {
-  //           console.log('Error adding document: ', error);
-  //         });
-  //     });
-  // };
+  componentDidMount() {
+    this.refresh();
+  }
 
   render() {
-    return (
-      <View>
-        <Text>New Screen</Text>
+    const { user, readyToRender } = this.state;
+    if (readyToRender) {
+      return (
+        <View style={styles.container}>
+          <View style={styles.center}>
+            <Avatar.Image size={128} source={{ uri: user.picture }} />
+            <Headline>{`${user.given_name}, ${Date.now().getYear() -
+              user.birthdate.getYear()}`}</Headline>
+          </View>
 
-        <Button onPress={this.insertAirport}>Ajouter Airport</Button>
-        <Button onPress={this.insertAirportService}>Ajouter Service</Button>
+          <View style={styles.row}>
+            <View style={[styles.column, styles.center]}>
+              <Title>Rencontres</Title>
+              <Paragraph>{user.meets.length}</Paragraph>
+            </View>
+            <View style={[styles.column, styles.center]}>
+              <Title>Bons plans</Title>
+              <Paragraph>{user.good_plans_saved.length}</Paragraph>
+            </View>
+            <View style={[styles.column, styles.center]}>
+              <Title>Points</Title>
+              <Paragraph>{user.points}</Paragraph>
+            </View>
+          </View>
 
-        <Button
-          onPress={async () => {
-            await AsyncStorage.clear();
-            this.props.navigation.navigate('AuthLoading');
-          }}
-        >
-          Déconnexion
-        </Button>
-      </View>
-    );
+          <View style={styles.row}>
+            <Subheading>{`Votre profil est complet à `}</Subheading>
+            <Subheading style={{ color: colors.primary }}>{'60%'}</Subheading>
+          </View>
+          <ProgressBar progress={60} />
+
+          <Title>Résumé</Title>
+          <Paragraph>{user.resume}</Paragraph>
+
+          <Button
+            mode="text"
+            icon="create"
+            onPress={() => {
+              this.props.navigation.navigate('editProfil', {
+                onGoBack: () => this.refresh(),
+              });
+            }}
+          >
+            Modifier mes informations
+          </Button>
+          <Button mode="text" icon="setting" onPress={() => {}}>
+            Réglages
+          </Button>
+        </View>
+      );
+    }
+    return <View />;
   }
 }

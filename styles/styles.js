@@ -51,6 +51,15 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 25,
   },
+
+  progressBarDiv: {
+    width: '15%',
+    height: 28,
+    marginBottom: 12,
+    marginTop: 12,
+    marginRight: 12,
+  },
+
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
