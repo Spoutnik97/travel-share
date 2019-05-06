@@ -21,7 +21,10 @@
       "backgroundColor": "#000"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app uses the GPS to locate you in an airport, and suggests you the best services."
+      }
     }
   }
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import firebase from 'firebase';
-// import '@firebase/firestore';
+import '@firebase/firestore';
 
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';

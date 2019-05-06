@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+
+import firebase from 'firebase';
+import '@firebase/firestore';
+
 import {
   View,
   Picker,
@@ -53,6 +57,32 @@ export default class ShareWithScreen extends Component {
 
     this.state = {};
   }
+
+  getServicesFirestore = () => {
+    return new Promise((resolve, reject) => {
+      const db = firebase.firestore();
+      let services = [];
+      db.collection('airports')
+        .where('location.latitude', '<=', 49)
+        .where('location.latitude', '>=', 47)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            db.collection('airports')
+              .doc(doc.id)
+              .collection('services')
+              .get()
+              .then(querySnapshotServices => {
+                querySnapshotServices.forEach(service => {
+                  services.push(service.data());
+                  console.log(`${doc.id} => ${doc.data()}`);
+                });
+                resolve(services);
+              });
+          });
+        });
+    });
+  };
 
   componentDidMount() {}
 

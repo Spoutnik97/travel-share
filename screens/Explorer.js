@@ -1,12 +1,26 @@
 import React, { Component } from 'react';
-import { View, Picker, Text, TouchableOpacity } from 'react-native';
-import PropTypes from 'prop-types';
+
+import firebase from 'firebase';
+import '@firebase/firestore';
+
+import {
+  AsyncStorage,
+  Picker,
+  Platform,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { Constants, Location, Permissions } from 'expo';
+
 import { Icon } from 'react-native-elements';
 import { Button, TextInput, Title } from 'react-native-paper';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
 import colors from '../styles/colors';
 import styles from '../styles/styles';
+
+const db = firebase.firestore();
 
 export default class Explorer extends Component {
   static propTypes = {};
@@ -24,7 +38,39 @@ export default class Explorer extends Component {
     this.state = {};
   }
 
-  componentDidMount() {}
+  saveLocation = location => {
+    const user = { ...this.state.user, location: location };
+    db.collection('users')
+      .doc(this.state.user.id)
+      .update(user)
+      .then(() => {
+        console.log('Location updated : ' + JSON.stringify(location));
+        AsyncStorage.setItem('user', JSON.stringify(user)).then(() => {
+          this.setState({ user, location });
+        });
+      })
+      .catch(err => console.log(err));
+  };
+
+  getLocation = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    this.saveLocation(location);
+  };
+
+  componentDidMount() {
+    AsyncStorage.getItem('user').then(user => {
+      this.setState({ user: JSON.parse(user) }, () => {
+        this.getLocation();
+      });
+    });
+  }
 
   render() {
     return (

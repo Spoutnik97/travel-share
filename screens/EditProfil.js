@@ -14,8 +14,6 @@ import { CheckBoxModal } from '../components/rn-travel-share';
 import colors from '../styles/colors';
 import styles from '../styles/styles';
 
-import firebaseConfig from '../keys/firebase';
-
 import labelDictionnary from '../assets/dictionnaries/labels';
 import languagesDictionnary from '../assets/dictionnaries/languages';
 
@@ -81,10 +79,7 @@ export default class EditProfil extends Component {
     const { user } = this.state;
     return (
       <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.center}>
             <Avatar.Image size={128} source={{ uri: user.picture }} />
           </View>
