@@ -32,10 +32,6 @@ export default class AuthLoading extends Component {
 
   // Fetch the token from storage then navigate to our appropriate place
   bootstrapAsync = async () => {
-<<<<<<< HEAD
-    const user = await AsyncStorage.getItem('user');
-    this.props.navigation.navigate(user ? 'App' : 'Auth');
-=======
     return new Promise((resolve, reject) => {
       AsyncStorage.getItem('user').then(user => {
         this.setState({ user: JSON.parse(user) });
@@ -46,7 +42,6 @@ export default class AuthLoading extends Component {
 
   onLoad = () => {
     this.props.navigation.navigate(this.state.user ? 'App' : 'Auth');
->>>>>>> 76fd75b2ffb30a5e1623de21f97fdd38060a68bd
   };
 
   componentDidMount() {}

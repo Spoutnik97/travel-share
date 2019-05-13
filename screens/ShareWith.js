@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 
-<<<<<<< HEAD
 import { db } from '../Firebase';
-=======
-import firebase from 'firebase';
-import '@firebase/firestore';
->>>>>>> 76fd75b2ffb30a5e1623de21f97fdd38060a68bd
 
 import {
   AsyncStorage,
@@ -65,7 +60,6 @@ export default class ShareWithScreen extends Component {
     };
   }
 
-<<<<<<< HEAD
   fetchPeople = () => {
     const users = {};
     db.collection('users')
@@ -90,14 +84,10 @@ export default class ShareWithScreen extends Component {
       });
     });
   }
-=======
   getServicesFirestore = () => {
     return new Promise((resolve, reject) => {
-      const db = firebase.firestore();
       let services = [];
       db.collection('airports')
-        .where('location.latitude', '<=', 49)
-        .where('location.latitude', '>=', 47)
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
@@ -118,7 +108,6 @@ export default class ShareWithScreen extends Component {
   };
 
   componentDidMount() {}
->>>>>>> 76fd75b2ffb30a5e1623de21f97fdd38060a68bd
 
   render() {
     const { users, user } = this.state;
