@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import firebase from 'firebase';
-import '@firebase/firestore';
+import { db } from '../Firebase';
 
 import { AsyncStorage, ScrollView, Text, View } from 'react-native';
 import { Avatar, Button, TextInput } from 'react-native-paper';
@@ -56,7 +56,6 @@ export default class EditProfil extends Component {
       }
     });
 
-    const db = firebase.firestore();
     db.collection('users')
       .doc(user.id)
       .update(user)

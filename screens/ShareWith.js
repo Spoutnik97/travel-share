@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
-import firebase from 'firebase';
-import '@firebase/firestore';
+import { db } from '../Firebase';
 
 import {
   AsyncStorage,
@@ -62,7 +61,6 @@ export default class ShareWithScreen extends Component {
   }
 
   fetchPeople = () => {
-    const db = firebase.firestore();
     const users = {};
     db.collection('users')
       .get()

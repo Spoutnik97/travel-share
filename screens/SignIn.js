@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import firebase from 'firebase';
 import '@firebase/firestore';
 
+import { db } from '../Firebase';
+
 import {
   AsyncStorage,
   Image,
@@ -41,8 +43,6 @@ export default class SignIn extends Component {
   }
 
   getUser = (id, email) => {
-    const db = firebase.firestore();
-
     return new Promise((resolve, reject) => {
       db.collection('users')
         .doc(id)
@@ -73,8 +73,6 @@ export default class SignIn extends Component {
   };
 
   newUser = (user, callback) => {
-    const db = firebase.firestore();
-
     db.collection('users')
       .add(user)
       .then(docRef => {

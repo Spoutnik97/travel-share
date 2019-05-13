@@ -6,7 +6,6 @@ YellowBox.ignoreWarnings(['Setting a timer']);
 if (__DEV__) {
   import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
 }
-import('./FirebaseInit').then(() => console.log('Firebase Initialized'));
 
 import {
   createAppContainer,

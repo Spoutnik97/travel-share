@@ -17,7 +17,7 @@ export default class AuthLoading extends Component {
 
   constructor(props) {
     super(props);
-    this.initFirebase();
+    // this.initFirebase();
     this.bootstrapAsync();
   }
 

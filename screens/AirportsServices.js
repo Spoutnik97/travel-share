@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import firebase from 'firebase';
-// import '@firebase/firestore';
+import { db } from '../Firebase';
 
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
@@ -64,59 +63,56 @@ export default class AirportsServices extends Component {
     };
   }
 
-  getServices = () => {
-    return new Promise((resolve, reject) => {
-      const db = firebase.database();
-      let services = [];
-      db.ref('airports')
-        .once('value')
-        .then(airports => {
-          console.log(`typeof airports.val() : ${typeof airports.val()}`);
-
-          console.log(
-            `JSON.stringify(airports) : ${JSON.stringify(airports.val())}`
-          );
-
-          Object.values(airports.val()).forEach(airport => {
-            console.log(`JSON.stringify(airport) : ${JSON.stringify(airport)}`);
-
-            console.log(
-              `airport.services : ${JSON.stringify(airport.services)}`
-            );
-            Object.values(airport.services).forEach(service => {
-              services.push(service);
-            });
-          });
-
-          resolve(services);
-        });
-    });
-  };
-  // getServicesFirestore = () => {
+  // getServices = () => {
   //   return new Promise((resolve, reject) => {
-  //     const db = firebase.firestore();
+  //     const db = firebase.database();
   //     let services = [];
-  //     db.collection('airports')
-  //       .where('location.latitude', '<=', 49)
-  //       .where('location.latitude', '>=', 47)
-  //       .get()
-  //       .then(querySnapshot => {
-  //         querySnapshot.forEach(doc => {
-  //           db.collection('airports')
-  //             .doc(doc.id)
-  //             .collection('services')
-  //             .get()
-  //             .then(querySnapshotServices => {
-  //               querySnapshotServices.forEach(service => {
-  //                 services.push(service.data());
-  //                 console.log(`${doc.id} => ${doc.data()}`);
-  //               });
-  //               resolve(services);
-  //             });
+  //     db.ref('airports')
+  //       .once('value')
+  //       .then(airports => {
+  //         console.log(`typeof airports.val() : ${typeof airports.val()}`);
+  //
+  //         console.log(
+  //           `JSON.stringify(airports) : ${JSON.stringify(airports.val())}`
+  //         );
+  //
+  //         Object.values(airports.val()).forEach(airport => {
+  //           console.log(`JSON.stringify(airport) : ${JSON.stringify(airport)}`);
+  //
+  //           console.log(
+  //             `airport.services : ${JSON.stringify(airport.services)}`
+  //           );
+  //           Object.values(airport.services).forEach(service => {
+  //             services.push(service);
+  //           });
   //         });
+  //
+  //         resolve(services);
   //       });
   //   });
   // };
+  getServices = () => {
+    return new Promise((resolve, reject) => {
+      let services = [];
+      db.collection('airports')
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            db.collection('airports')
+              .doc(doc.id)
+              .collection('services')
+              .get()
+              .then(querySnapshotServices => {
+                querySnapshotServices.forEach(service => {
+                  services.push(service.data());
+                  console.log(`${doc.id} => ${doc.data()}`);
+                });
+                resolve(services);
+              });
+          });
+        });
+    });
+  };
 
   orderServices = services => {
     console.log('IN orderServices');

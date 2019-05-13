@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 
-import firebase from 'firebase';
-import '@firebase/firestore';
-import firebaseConfig from '../keys/firebase';
-try {
-  firebase.initializeApp(firebaseConfig);
-} catch (err) {
-  console.log(err.message);
-}
+import { db } from '../Firebase';
 
 import { ActivityIndicator, AsyncStorage, Text, View } from 'react-native';
 import { TextInput, Title } from 'react-native-paper';
@@ -18,8 +11,6 @@ import Reactotron from 'reactotron-react-native';
 
 import colors from '../styles/colors';
 import styles from '../styles/styles';
-
-const db = firebase.firestore();
 
 export default class Conversation extends Component {
   static propTypes = {};
