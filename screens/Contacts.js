@@ -1,35 +1,12 @@
 import React, { Component } from 'react';
 
-import firebase from 'firebase';
-import '@firebase/firestore';
+import { db } from '../Firebase';
 
 import { AsyncStorage, ScrollView } from 'react-native';
 import { Avatar, List, TextInput, Title } from 'react-native-paper';
 
 import colors from '../styles/colors';
 import styles from '../styles/styles';
-
-const TEST_DATA = [
-  {
-    id: 'a',
-    members: ['Guillaume'],
-    last_message: 'Salut, comment ça va ?',
-    messages: [],
-  },
-  {
-    id: 'b',
-    members: ['Martin'],
-    last_message: 'Hello, comment ça va ?',
-    messages: [],
-  },
-  {
-    id: 'c',
-    members: ['Florence', 'Grégoire'],
-    last_message: 'Hola, comment ça va ?',
-    messages: [],
-  },
-];
-const db = firebase.firestore();
 
 export default class Contacts extends Component {
   static propTypes = {};

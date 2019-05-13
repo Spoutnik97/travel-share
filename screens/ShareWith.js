@@ -21,27 +21,6 @@ import { CardPeople } from '../components/rn-travel-share';
 import colors from '../styles/colors';
 import styles from '../styles/styles';
 
-const TEST_DATA = [
-  {
-    picture: '../assets/test/pp.jpg',
-    given_name: 'Florence',
-    resume:
-      '45 ans - Voyage Aventure En partance pour Hanoï Disponible jusqu’à 22h',
-  },
-  {
-    picture: '../assets/test/pp.jpg',
-    given_name: 'Adeline',
-    resume:
-      '45 ans - Voyage Aventure En partance pour Hanoï Disponible jusqu’à 22h',
-  },
-  {
-    picture: '../assets/test/pp.jpg',
-    given_name: 'Clara',
-    resume:
-      '45 ans - Voyage Aventure En partance pour Hanoï Disponible jusqu’à 22h',
-  },
-];
-
 export default class ShareWithScreen extends Component {
   static propTypes = {};
 
@@ -77,13 +56,6 @@ export default class ShareWithScreen extends Component {
       .catch(err => console.log(err));
   };
 
-  componentDidMount() {
-    AsyncStorage.getItem('user').then(user => {
-      this.setState({ user: JSON.parse(user) }, () => {
-        this.fetchPeople();
-      });
-    });
-  }
   getServicesFirestore = () => {
     return new Promise((resolve, reject) => {
       let services = [];
@@ -107,7 +79,13 @@ export default class ShareWithScreen extends Component {
     });
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    AsyncStorage.getItem('user').then(user => {
+      this.setState({ user: JSON.parse(user) }, () => {
+        this.fetchPeople();
+      });
+    });
+  }
 
   render() {
     const { users, user } = this.state;
