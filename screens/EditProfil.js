@@ -14,8 +14,6 @@ import { CheckBoxModal } from '../components/rn-travel-share';
 import colors from '../styles/colors';
 import styles from '../styles/styles';
 
-import firebaseConfig from '../keys/firebase';
-
 import labelDictionnary from '../assets/dictionnaries/labels';
 import languagesDictionnary from '../assets/dictionnaries/languages';
 
