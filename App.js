@@ -199,19 +199,19 @@ const TabNavigator = createMaterialBottomTabNavigator(
         ),
       },
     },
-    Favorites: {
-      screen: FavoritesStackNavigator,
-      navigationOptions: {
-        title: 'Bons plans',
-        tabBarIcon: ({ focused }) => (
-          <Icon
-            name="favorite-border"
-            size={24}
-            color={focused ? colors.primary : colors.grey_dark}
-          />
-        ),
-      },
-    },
+    // Favorites: {
+    //   screen: FavoritesStackNavigator,
+    //   navigationOptions: {
+    //     title: 'Bons plans',
+    //     tabBarIcon: ({ focused }) => (
+    //       <Icon
+    //         name="favorite-border"
+    //         size={24}
+    //         color={focused ? colors.primary : colors.grey_dark}
+    //       />
+    //     ),
+    //   },
+    // },
     Profil: {
       screen: ProfilStackNavigator,
       navigationOptions: {
@@ -229,7 +229,8 @@ const TabNavigator = createMaterialBottomTabNavigator(
   {
     labeled: true,
     initialRouteName: 'Explorer',
-    order: ['Profil', 'Favorites', 'Airports', 'Messages', 'Explorer'],
+    order: ['Profil', 'Airports', 'Messages', 'Explorer'],
+    // order: ['Profil', 'Favorites', 'Airports', 'Messages', 'Explorer'],
     activeColor: colors.primary,
     inactiveColor: colors.grey_dark,
     barStyle: { backgroundColor: colors.grey_light },

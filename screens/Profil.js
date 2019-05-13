@@ -50,9 +50,9 @@ export default class Profil extends Component {
     const { user, readyToRender } = this.state;
     if (readyToRender) {
       return (
-        <View style={styles.container}>
+        <View style={{ ...styles.container, paddingTop: 0, paddingBottom: 0 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.center}>
+            <View style={{ ...styles.center, marginTop: 24 }}>
               <Avatar.Image size={128} source={{ uri: user.picture }} />
               <Headline>
                 {user.birthdate
