@@ -20,7 +20,8 @@
     "react-native-modal-datetime-picker": "^6.1.0",
     "react-native-paper": "^2.15.2",
     "react-navigation": "^3.6.1",
-    "react-navigation-material-bottom-tabs": "^1.0.0"
+    "react-navigation-material-bottom-tabs": "^1.0.0",
+    "reactotron-react-native": "^3.4.1"
   },
   "devDependencies": {
     "@callstack/eslint-config": "^4.1.0",

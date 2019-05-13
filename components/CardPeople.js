@@ -35,10 +35,7 @@ export default class CardPeople extends Component {
         style={[styles.row, styles.CardPeople]}
         onPress={this.props.onPress}
       >
-        <Avatar.Image
-          size={64}
-          source={require('../assets/test/florence.jpg')}
-        />
+        <Avatar.Image size={64} source={{ uri: this.props.picture }} />
         <View style={[styles.column, styles.content]}>
           <Title>{this.props.header}</Title>
           <Paragraph>{this.props.content}</Paragraph>

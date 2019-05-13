@@ -113,6 +113,14 @@ export default class Profil extends Component {
               <Button mode="text" icon="settings" onPress={() => {}}>
                 Réglages
               </Button>
+              <Button
+                onPress={async () => {
+                  await AsyncStorage.clear();
+                  this.props.navigation.navigate('AuthLoading');
+                }}
+              >
+                Déconnexion
+              </Button>
             </View>
           </ScrollView>
         </View>

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Reactotron from 'reactotron-react-native';
 
-import { Image, View } from 'react-native';
+import { AsyncStorage, Image, View } from 'react-native';
 import {
   Avatar,
   Button,
@@ -27,35 +28,80 @@ export default class ShareWithProfil extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      user: this.props.navigation.state.params.user || null,
+      friend: this.props.navigation.state.params.friend || null,
+    };
   }
 
-  componentDidMount() {}
+  conversationId = function(user1, user2) {
+    if (user1 >= user2) {
+      return '-' + user2 + '-' + user1;
+    }
+    return '-' + user1 + '-' + user2;
+  };
+
+  componentDidMount() {
+    Reactotron.log(this.state.user);
+    if (this.state.friend) {
+      if (!this.state.user) {
+        AsyncStorage.getItem('user').then(value => {
+          const user = JSON.parse(value);
+          const conversation_id = this.conversationId(
+            user.id,
+            this.state.friend.id
+          );
+
+          this.setState({ user: user, conversation_id });
+        });
+      } else {
+        const conversation_id = this.conversationId(
+          this.state.user.id,
+          this.state.friend.id
+        );
+        Reactotron.log(conversation_id);
+        this.setState({ conversation_id });
+      }
+    } else {
+      console.log("Erreur : le profil friend n'a pas été transmis");
+      this.props.navigation.navigate.goBack();
+    }
+  }
 
   render() {
-    const { user } = this.props.navigation.state.params;
+    const { friend, conversation_id, user } = this.state;
+    Reactotron.log('Render conv id');
+    Reactotron.log(conversation_id);
     return (
       <View style={styles.container}>
         <View style={styles.row}>
-          <Avatar.Image size={64} source={{ uri: user.picture }} />
+          <Avatar.Image size={64} source={{ uri: friend.picture }} />
           <View style={[styles.column, styles.content]}>
-            <Title style={{ color: colors.primary }}>{user.given_name}</Title>
-            <Paragraph>{user.resume}</Paragraph>
+            <Title style={{ color: colors.primary }}>{friend.given_name}</Title>
+            <Paragraph>{friend.resume}</Paragraph>
           </View>
         </View>
 
         <Button
+          mode="contained"
           onPress={() => {
-            this.props.navigation.navigate('conversation', { user });
+            this.props.navigation.navigate('newConversation', {
+              conversation: {
+                id: conversation_id,
+                name: friend.given_name,
+                picture: friend.picture,
+              },
+              user,
+            });
           }}
-        >{`Envoyer un message à ${user.given_name}`}</Button>
+        >{`Envoyer un message à ${friend.given_name}`}</Button>
 
         <Subheading>{`A déjà visité ${
-          user.countries_visited ? user.countries_visited.length : 0
+          friend.countries_visited ? friend.countries_visited.length : 0
         } pays`}</Subheading>
         <Subheading>Parle</Subheading>
-        {user.languages &&
-          user.languages.map(language => {
+        {friend.languages &&
+          friend.languages.map(language => {
             <View style={styles.row}>
               <Image
                 source={{ uri: languagesDictionnary[language].flag }}

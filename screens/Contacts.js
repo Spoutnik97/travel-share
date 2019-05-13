@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
-import { View } from 'react-native';
+import firebase from 'firebase';
+import '@firebase/firestore';
+
+import { AsyncStorage, ScrollView } from 'react-native';
 import { Avatar, List, TextInput, Title } from 'react-native-paper';
-
-import Fire from '../Fire';
-import { GiftedChat } from 'react-native-gifted-chat';
 
 import colors from '../styles/colors';
 import styles from '../styles/styles';
@@ -30,6 +29,7 @@ const TEST_DATA = [
     messages: [],
   },
 ];
+const db = firebase.firestore();
 
 export default class Contacts extends Component {
   static propTypes = {};
@@ -49,34 +49,63 @@ export default class Contacts extends Component {
     super(props);
 
     this.state = {
-      messages: TEST_DATA,
+      messages: [],
     };
   }
 
+  componentDidMount() {
+    AsyncStorage.getItem('user').then(value => {
+      const user = JSON.parse(value);
+
+      const messages = [];
+
+      Promise.all(
+        Object.keys(user.conversations).map(
+          conv_id =>
+            new Promise(function(resolve, reject) {
+              console.log(`conv_id : ${conv_id}`);
+
+              db.collection('conversations')
+                .doc(conv_id)
+                .get()
+                .then(doc => {
+                  const conversation = doc.data();
+                  console.log(`conversation : ${JSON.stringify(conversation)}`);
+
+                  messages.push(conversation);
+                  resolve();
+                })
+                .catch(err => console.log(err));
+            })
+        )
+      ).then(values => {
+        this.setState({ user, messages });
+      });
+    });
+  }
+
   render() {
-    const { messages } = this.state;
+    const { messages, user } = this.state;
     return (
-      <View style={{ margin: 12 }}>
+      <ScrollView style={{ padding: 12 }}>
         {messages &&
           messages.map(conv => (
             <List.Item
               key={conv.id}
-              title={conv.members.join(', ')}
+              title={conv.name}
               description={conv.last_message}
               onPress={() =>
                 this.props.navigation.navigate('conversation', {
                   conversation: conv,
+                  user,
                 })
               }
               left={props => (
-                <Avatar.Image
-                  size={64}
-                  source={require('../assets/test/florence.jpg')}
-                />
+                <Avatar.Image size={64} source={{ uri: conv.picture }} />
               )}
             />
           ))}
-      </View>
+      </ScrollView>
     );
   }
 }

@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
+
+import firebase from 'firebase';
+import '@firebase/firestore';
+
 import {
+  AsyncStorage,
   View,
   Picker,
   Text,
@@ -51,28 +56,57 @@ export default class ShareWithScreen extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      users: {},
+    };
   }
 
-  componentDidMount() {}
+  fetchPeople = () => {
+    const db = firebase.firestore();
+    const users = {};
+    db.collection('users')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(snapshot => {
+          const friend = snapshot.data();
+          if (friend.id !== this.state.user.id) {
+            users[friend.id] = friend;
+          }
+        });
+
+        this.setState({ users });
+      })
+      .catch(err => console.log(err));
+  };
+
+  componentDidMount() {
+    AsyncStorage.getItem('user').then(user => {
+      this.setState({ user: JSON.parse(user) }, () => {
+        this.fetchPeople();
+      });
+    });
+  }
 
   render() {
+    const { users, user } = this.state;
     return (
       <View style={styles.container}>
         <ScrollView>
-          {TEST_DATA.map(item => (
-            <CardPeople
-              key={item.given_name}
-              picture={item.picture}
-              header={item.given_name}
-              content={item.resume}
-              onPress={() => {
-                this.props.navigation.navigate('shareWithProfil', {
-                  user: item,
-                });
-              }}
-            />
-          ))}
+          {users &&
+            Object.values(users).map(friend => (
+              <CardPeople
+                key={friend.id}
+                picture={friend.picture || ' '}
+                header={friend.given_name}
+                content={friend.resume}
+                onPress={() => {
+                  this.props.navigation.navigate('shareWithProfil', {
+                    friend: friend,
+                    user: user,
+                  });
+                }}
+              />
+            ))}
         </ScrollView>
       </View>
     );

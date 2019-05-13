@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import firebase from 'firebase';
+import '@firebase/firestore';
 
 import {
   AsyncStorage,
@@ -39,36 +40,74 @@ export default class SignIn extends Component {
     };
   }
 
-  observeAuth = () =>
-    firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
+  getUser = (id, email) => {
+    const db = firebase.firestore();
 
-  onAuthStateChanged = async user => {
-    if (!user) {
-      this.setState({ signup: true });
-      try {
-        firebase.auth().signInAnonymously();
-      } catch ({ message }) {
-        alert(message);
-      }
-    } else {
-      this.props.navigation.navigate('App');
-    }
+    return new Promise((resolve, reject) => {
+      db.collection('users')
+        .doc(id)
+        .get()
+        .then(doc => {
+          if (doc.exists) {
+            const user = doc.data();
+            resolve(user);
+          } else {
+            db.collection('users')
+              .doc(id)
+              .set({
+                email,
+                id,
+              })
+              .then(() => {
+                const user = { email, id };
+                resolve(user);
+              })
+              .catch(err => console.log(err));
+          }
+        })
+        .catch(error => {
+          console.error('Error getting document: ', error);
+          reject(error);
+        });
+    });
   };
 
-  componentDidMount() {}
+  newUser = (user, callback) => {
+    const db = firebase.firestore();
+
+    db.collection('users')
+      .add(user)
+      .then(docRef => {
+        db.collection('users')
+          .doc(docRef.id)
+          .update({ ...user, id: docRef.id })
+          .then(() => {
+            console.log(`docRef.id : ${docRef.id}`);
+
+            AsyncStorage.setItem(
+              'user',
+              JSON.stringify({ ...user, id: docRef.id })
+            ).then(() => callback(docRef.id));
+          });
+      })
+      .catch(function(error) {
+        console.error('Error adding document: ', error);
+      });
+  };
 
   handleSignUpEmail = () => {
     //this.signup_TEST();
     const { email, password, confirm_password } = this.state;
-
+    this.setState({ isConnecting: true });
     if (confirm_password === password) {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(async () => {
-          await AsyncStorage.setItem('user', JSON.stringify({ email }));
-          // await AsyncStorage.setItem('password', password);
-          this.props.navigation.navigate('App');
+          // await AsyncStorage.setItem('user', JSON.stringify({ email }));
+          this.newUser({ email }, () => {
+            this.props.navigation.navigate('App');
+          });
         })
         .catch(error => {
           var errorCode = error.code;
@@ -80,12 +119,14 @@ export default class SignIn extends Component {
               snackbarMessage: 'Cet utilisateur existe déjà. Connectez-vous !',
               snackbarVisible: true,
               signup: false,
+              isConnecting: false,
             });
           } else if (errorCode === 'auth/invalid-email') {
             this.setState({
               email_error: true,
               snackbarMessage: "L'email est incorrect",
               snackbarVisible: true,
+              isConnecting: false,
             });
           } else if (errorCode === 'auth/operation-not-allowed') {
             console.log(errorCode + ' : ' + errorMessage);
@@ -96,6 +137,7 @@ export default class SignIn extends Component {
               snackbarVisible: true,
               password_error: true,
               confirm_password_error: true,
+              isConnecting: false,
             });
           } else {
             console.log(errorCode + ' : ' + errorMessage);
@@ -105,37 +147,51 @@ export default class SignIn extends Component {
       this.setState({
         password_error: true,
         confirm_password_error: true,
-        snackbarMessage: 'Le mot de passe et la confirmation son différents',
+        snackbarMessage: 'Le mot de passe et la confirmation sont différents',
         snackbarVisible: true,
+        isConnecting: false,
       });
     }
   };
+
   handleSignInEmail = () => {
     const { email, password } = this.state;
+    this.setState({ isConnecting: true });
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(async () => {
-        await AsyncStorage.setItem('user', JSON.stringify({ email }));
+      .then(userCredentials => {
+        const id = userCredentials.user.uid;
+        console.log(`id : ${id}`);
+
+        this.getUser(id, email)
+          .then(user => {
+            AsyncStorage.setItem('user', JSON.stringify(user)).then(() => {
+              this.props.navigation.navigate('App');
+            });
+          })
+          .catch(err => console.log(err));
+        // await AsyncStorage.setItem('user', JSON.stringify({ email }));
         // await AsyncStorage.setItem('password', password);
-        this.props.navigation.navigate('App');
       })
       .catch(error => {
         var errorCode = error.code;
         var errorMessage = error.message;
         console.log(errorCode + ' : ' + errorMessage);
         if (errorCode === 'auth/wrong-password') {
-          this.setState({ password_error: true });
+          this.setState({ password_error: true, isConnecting: false });
         } else if (errorCode === 'auth/invalid-email') {
           this.setState({
             email_error: true,
             snackbarMessage: "L'email est incorrect",
             snackbarVisible: true,
+            isConnecting: false,
           });
         } else if (errorCode === 'auth/user-disabled') {
           this.setState({
             snackbarMessage: 'Cet utilisateur a été désactivé',
             snackbarVisible: true,
+            isConnecting: false,
           });
         } else if (errorCode === 'auth/user-not-found') {
           this.setState({
@@ -143,6 +199,7 @@ export default class SignIn extends Component {
               'Utilisateur inconnu. Inscrivez-vous pour commencer !',
             snackbarVisible: true,
             signup: true,
+            isConnecting: false,
           });
         } else {
           console.log(errorCode + ' : ' + errorMessage);
@@ -155,6 +212,8 @@ export default class SignIn extends Component {
   handleSignInFacebook = () => {};
 
   handleSignInLinkedIn = () => {};
+
+  componentDidMount() {}
 
   render() {
     return (
@@ -207,6 +266,7 @@ export default class SignIn extends Component {
             <Button
               mode="contained"
               style={{ marginTop: 24 }}
+              loading={this.state.isConnecting}
               onPress={
                 this.state.signup
                   ? this.handleSignUpEmail

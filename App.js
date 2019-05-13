@@ -1,5 +1,13 @@
 import React from 'react';
 import { YellowBox } from 'react-native';
+
+YellowBox.ignoreWarnings(['Setting a timer']);
+
+if (__DEV__) {
+  import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
+}
+import('./FirebaseInit').then(() => console.log('Firebase Initialized'));
+
 import {
   createAppContainer,
   createStackNavigator,
@@ -39,8 +47,6 @@ import ServiceDetailsScreen from './screens/ServiceDetails';
 import colors from './styles/colors';
 import styles from './styles/styles';
 
-YellowBox.ignoreWarnings(['Setting a timer']);
-
 const theme = {
   ...DefaultTheme,
   roundness: 2,
@@ -67,6 +73,7 @@ const ExplorerStackNavigator = createStackNavigator(
     explorerHome: { screen: ExplorerScreen },
     shareWith: { screen: ShareWithScreen },
     shareWithProfil: { screen: ShareWithProfilScreen },
+    newConversation: { screen: ConversationScreen },
   },
   {
     defaultNavigationOptions: {
@@ -96,10 +103,21 @@ const ProfilStackNavigator = createStackNavigator(
   }
 );
 
-const MessagesStackNavigator = createStackNavigator({
-  contacts: { screen: ContactsScreen },
-  conversation: { screen: ConversationScreen },
-});
+const MessagesStackNavigator = createStackNavigator(
+  {
+    contacts: { screen: ContactsScreen },
+    conversation: { screen: ConversationScreen },
+  },
+  {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: colors.primary,
+        height: styles.HEADER_HEIGHT,
+      },
+      headerTintColor: '#fff',
+    },
+  }
+);
 
 const TipsTabNavigator = createMaterialTopTabNavigator(
   {

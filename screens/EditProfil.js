@@ -48,7 +48,7 @@ export default class EditProfil extends Component {
   }
 
   handleSave = () => {
-    let user = {};
+    let user = this.state.user;
     this.state.userData.forEach(label => {
       user[label] = this.state[label] || this.state.user[label] || null;
       if (label === 'email' && user[label] === 'guipiedi@gmail.com') {
@@ -56,19 +56,38 @@ export default class EditProfil extends Component {
       }
     });
 
-    let userOnline = firebase.auth().currentUser;
-
-    userOnline
-      .updateProfile(user)
-      .then(() => {
+    const db = firebase.firestore();
+    db.collection('users')
+      .doc(user.id)
+      .update(user)
+      .then(docRef => {
         AsyncStorage.setItem('user', JSON.stringify(user)).then(() => {
           this.props.navigation.state.params.onGoBack();
           this.props.navigation.goBack();
         });
       })
       .catch(error => {
-        console.log(error);
+        console.error('Error adding document: ', error);
       });
+  };
+
+  uploadImage = async uri => {
+    try {
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const ref = firebase
+        .storage()
+        .ref('avatar')
+        .child('IMAGE_ID');
+      const task = ref.put(blob);
+      return new Promise((resolve, reject) => {
+        task.on('state_changed', () => {}, reject, () =>
+          resolve(task.snapshot.downloadURL)
+        );
+      });
+    } catch (err) {
+      console.log('uploadImage error: ' + err.message);
+    }
   };
 
   componentDidMount() {
@@ -81,10 +100,7 @@ export default class EditProfil extends Component {
     const { user } = this.state;
     return (
       <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.center}>
             <Avatar.Image size={128} source={{ uri: user.picture }} />
           </View>

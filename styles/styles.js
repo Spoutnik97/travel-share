@@ -16,6 +16,8 @@ const styles = StyleSheet.create({
   CardPeople: {
     elevation: 2,
     borderRadius: 12,
+    borderColor: colors.grey_light,
+    borderWidth: 1,
     backgroundColor: colors.white,
     padding: 12,
   },
