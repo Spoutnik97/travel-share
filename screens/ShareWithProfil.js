@@ -42,7 +42,6 @@ export default class ShareWithProfil extends Component {
   };
 
   componentDidMount() {
-    Reactotron.log(this.state.user);
     if (this.state.friend) {
       if (!this.state.user) {
         AsyncStorage.getItem('user').then(value => {
@@ -59,7 +58,6 @@ export default class ShareWithProfil extends Component {
           this.state.user.id,
           this.state.friend.id
         );
-        Reactotron.log(conversation_id);
         this.setState({ conversation_id });
       }
     } else {
@@ -70,8 +68,6 @@ export default class ShareWithProfil extends Component {
 
   render() {
     const { friend, conversation_id, user } = this.state;
-    Reactotron.log('Render conv id');
-    Reactotron.log(conversation_id);
     return (
       <View style={styles.container}>
         <View style={styles.row}>

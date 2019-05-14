@@ -16,8 +16,6 @@ import { ProgressBar } from '../components/rn-travel-share';
 import colors from '../styles/colors';
 import styles from '../styles/styles';
 
-import firebaseConfig from '../keys/firebase';
-
 export default class Profil extends Component {
   static propTypes = {};
 

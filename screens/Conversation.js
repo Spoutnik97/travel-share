@@ -84,9 +84,9 @@ export default class Conversation extends Component {
   };
 
   newConversation = (conversation_id, user, friend) => {
-    console.log('newConversation conversation_id : ' + conversation_id);
-    console.log('newConversation user : ' + JSON.stringify(user));
-    console.log('newConversation friend : ' + JSON.stringify(friend));
+    Reactotron.log('newConversation conversation_id : ' + conversation_id);
+    Reactotron.log('newConversation user : ' + JSON.stringify(user));
+    Reactotron.log('newConversation friend : ' + JSON.stringify(friend));
     return new Promise((resolve, reject) => {
       db.collection('conversations')
         .doc(conversation_id)
@@ -97,7 +97,7 @@ export default class Conversation extends Component {
           created_at: Date.now(),
         })
         .then(() => {
-          console.log('Conversation créée : ' + conversation_id);
+          Reactotron.log('Conversation créée : ' + conversation_id);
           let updated_user = user;
           updated_user = {
             ...updated_user,
@@ -140,23 +140,23 @@ export default class Conversation extends Component {
     }
   };
 
-  findFriendId = function(user_id, conversation_id) {
-    const ids = conversation_id.split('-');
-    ids.forEach(id => {
-      console.log(id);
-      console.log(user_id);
-      console.log(id !== user_id);
-      if (id !== user_id) {
-        return id;
+  findFriendId = (user_id, conversation_id) => {
+    const ids = conversation_id.split('-').slice(1);
+    Reactotron.log(ids);
+    for (let i in ids) {
+      if (ids[i] !== user_id && ids[i] !== '') {
+        Reactotron.log('OK');
+        return ids[i];
       }
-    });
+    }
+    // ids.forEach(id => {
+    //
+    // });
     return null;
   };
 
   async componentDidMount() {
     const { conversation } = this.state;
-    Reactotron.log(conversation);
-
     if (conversation.id) {
       let { user } = this.state;
       if (!user) {
@@ -167,31 +167,35 @@ export default class Conversation extends Component {
       }
 
       const friend_id = this.findFriendId(user.id, conversation.id);
-      console.log('firend id : ' + friend_id);
-      this.setState({ status: 'Chargement de la conversation...' });
-      db.collection('conversations')
-        .doc(conversation.id)
-        .get()
-        .then(doc => {
-          if (doc.exists) {
-            this.setState({ status: 'Chargement des messages...' });
-            this.fetchMessages(conversation.id);
-            this.setState({ user, status: false });
-          } else {
-            this.setState({ status: 'Création de la conversation...' });
-            this.newConversation(conversation.id, user, {
-              given_name: conversation.name,
-              id: friend_id,
-            })
-              .then(() => {
-                this.fetchMessages(conversation.id);
-                this.setState({ user, status: false });
+
+      if (friend_id) {
+        this.setState({ status: 'Chargement de la conversation...' });
+        db.collection('conversations')
+          .doc(conversation.id)
+          .get()
+          .then(doc => {
+            if (doc.exists) {
+              this.setState({ status: 'Chargement des messages...' });
+              this.fetchMessages(conversation.id);
+              this.setState({ user, status: false });
+            } else {
+              this.setState({ status: 'Création de la conversation...' });
+              this.newConversation(conversation.id, user, {
+                given_name: conversation.name,
+                id: friend_id,
               })
-              .catch(err => console.log(err));
-          }
-          console.log(`conversation.id : ${conversation.id}`);
-        })
-        .catch(err => console.log(err));
+                .then(() => {
+                  this.fetchMessages(conversation.id);
+                  this.setState({ user, status: false });
+                })
+                .catch(err => Reactotron.log(err));
+            }
+          })
+          .catch(err => console.log(err));
+      } else {
+        this.setState({ status: 'Erreur de chargement :(' });
+        console.log("Erreur de chargement de l'id de l'amis");
+      }
     } else {
       this.setState({
         status: "Impossible d'obtenir les informations de ce voyageur :(",
