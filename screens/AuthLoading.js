@@ -19,7 +19,8 @@ export default class AuthLoading extends Component {
   constructor(props) {
     super(props);
     // this.initFirebase();
-    this.bootstrapAsync();
+    // this.bootstrapAsync();
+    console.log('Hello');
   }
 
   initFirebase = () => {
@@ -34,8 +35,9 @@ export default class AuthLoading extends Component {
   bootstrapAsync = async () => {
     return new Promise((resolve, reject) => {
       AsyncStorage.getItem('user').then(user => {
-        this.setState({ user: JSON.parse(user) });
-        resolve(JSON.parse(user));
+        this.setState({ user: JSON.parse(user) }, () => {
+          resolve();
+        });
       });
     });
   };
@@ -53,7 +55,6 @@ export default class AuthLoading extends Component {
         startAsync={this.bootstrapAsync}
         onFinish={this.onLoad}
         onError={console.warn}
-        autoHideSplash={false}
       />
     );
   }

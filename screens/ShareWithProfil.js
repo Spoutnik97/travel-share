@@ -85,7 +85,7 @@ export default class ShareWithProfil extends Component {
         <Button
           mode="contained"
           onPress={() => {
-            this.props.navigation.navigate('newConversation', {
+            this.props.navigation.navigate('conversation', {
               conversation: {
                 id: conversation_id,
                 name: friend.given_name,

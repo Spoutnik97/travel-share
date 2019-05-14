@@ -20,6 +20,7 @@ export default class Conversation extends Component {
   static navigationOptions = ({ navigation, navigationOptions }) => ({
     title: navigation.state.params.conversation.name,
     ...navigationOptions,
+    headerMode: 'screen',
   });
 
   constructor(props) {
@@ -58,7 +59,7 @@ export default class Conversation extends Component {
         .collection('conversations')
         .doc(conversation_id)
         .collection('messages')
-        .orderBy('createdAt', 'desc')
+        .orderBy('createdAt', 'asc')
         .onSnapshot(snapshot => {
           var data = [];
           snapshot.docChanges().forEach(change => {
@@ -84,6 +85,8 @@ export default class Conversation extends Component {
 
   newConversation = (conversation_id, user, friend) => {
     console.log('newConversation conversation_id : ' + conversation_id);
+    console.log('newConversation user : ' + JSON.stringify(user));
+    console.log('newConversation friend : ' + JSON.stringify(friend));
     return new Promise((resolve, reject) => {
       db.collection('conversations')
         .doc(conversation_id)
@@ -126,10 +129,10 @@ export default class Conversation extends Component {
   onSend = mess => {
     const message = mess[0];
     Reactotron.log(message);
-    const { conversation_id } = this.state;
-    if (conversation_id) {
+    const { conversation } = this.state;
+    if (conversation.id) {
       db.collection('conversations')
-        .doc(conversation_id)
+        .doc(conversation.id)
         .collection('messages')
         .add(message)
         .then(() => {})
@@ -140,10 +143,14 @@ export default class Conversation extends Component {
   findFriendId = function(user_id, conversation_id) {
     const ids = conversation_id.split('-');
     ids.forEach(id => {
-      if (id && id !== user_id && id !== '') {
+      console.log(id);
+      console.log(user_id);
+      console.log(id !== user_id);
+      if (id !== user_id) {
         return id;
       }
     });
+    return null;
   };
 
   async componentDidMount() {
@@ -160,7 +167,7 @@ export default class Conversation extends Component {
       }
 
       const friend_id = this.findFriendId(user.id, conversation.id);
-
+      console.log('firend id : ' + friend_id);
       this.setState({ status: 'Chargement de la conversation...' });
       db.collection('conversations')
         .doc(conversation.id)

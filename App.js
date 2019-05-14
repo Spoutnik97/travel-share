@@ -72,7 +72,7 @@ const ExplorerStackNavigator = createStackNavigator(
     explorerHome: { screen: ExplorerScreen },
     shareWith: { screen: ShareWithScreen },
     shareWithProfil: { screen: ShareWithProfilScreen },
-    newConversation: { screen: ConversationScreen },
+    // newConversation: { screen: ConversationScreen },
   },
   {
     defaultNavigationOptions: {
@@ -105,7 +105,7 @@ const ProfilStackNavigator = createStackNavigator(
 const MessagesStackNavigator = createStackNavigator(
   {
     contacts: { screen: ContactsScreen },
-    conversation: { screen: ConversationScreen },
+    // conversation: { screen: ConversationScreen },
   },
   {
     defaultNavigationOptions: {
@@ -173,7 +173,7 @@ const TabNavigator = createMaterialBottomTabNavigator(
       },
     },
     Messages: {
-      screen: MessagesStackNavigator,
+      screen: ContactsScreen,
       navigationOptions: {
         title: 'Messages',
         tabBarIcon: ({ focused }) => (
@@ -236,10 +236,32 @@ const TabNavigator = createMaterialBottomTabNavigator(
   }
 );
 
+const AppStackNavigator = createStackNavigator(
+  {
+    AppTabNavigator: {
+      screen: TabNavigator,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    conversation: { screen: ConversationScreen },
+  },
+  {
+    initialRouteName: 'AppTabNavigator',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: colors.primary,
+        height: styles.HEADER_HEIGHT,
+      },
+      headerTintColor: '#fff',
+    },
+  }
+);
+
 const AuthNavigator = createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
-    App: TabNavigator,
+    App: AppStackNavigator,
     Auth: AuthStackNavigator,
   },
   {
